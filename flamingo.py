@@ -1,82 +1,23 @@
 import sys
 from PyQt4 import QtCore, QtGui
-import create_file
 import editor_window
-import school_essay
+import ui_schoolEssay
 
-class MyMainWindow(QtGui.QMainWindow):
+class SchoolDialog(QtGui.QDialog):
 	def __init__(self):
-		QtGui.QMainWindow.__init__(self) 
-		
-		self.ui = create_file.Ui_MainWindow()
-		self.ui.setupUi(self)
-		
-		self.initUiElements()
-
-	def initUiElements(self):
-		self.ui.themeComboBox.addItems(["None", 
-						"School Essay",
-						"Debate",
-						"Formal Letter",
-						"Policy Memo"])
-		
-		self.ui.readabilityComboBox.addItems(["None",
-						"Children (< 13)",
-						"Adolescence (13-18)",
-						"Undergraduate",
-						"Post Graduate",
-						"PhD"])
-
-		self.ui.browsePushButton.clicked.connect(self.selectFile)
-		self.ui.openPushButton.clicked.connect(self.openFile)
-		self.ui.createPushButton.clicked.connect(self.createFile)
-		self.ui.cancelPushButton.clicked.connect(self.reject)
-
-	def selectFile(self):
-		self.ui.pathTextEdit.setPlainText(QtGui.QFileDialog.getOpenFileName())
-	
-	def openFile(self):
-		path = self.ui.pathTextEdit.toPlainText()
-		
-		if path[-4:] != '.txt':
-			self.ui.pathTextEdit.setPlainText("Please use .txt!")
-
-	def createFile(self):
-		params = []
-
-		params.append(self.ui.nameTextEdit.toPlainText())
-		params.append(self.ui.themeComboBox.currentText())
-		params.append(self.ui.readabilityComboBox.currentText())
-		
-		theme = self.ui.themeComboBox.currentText()
-		
-		self.close()
-
-		if theme == 'School Essay':
-			self.window = SchoolMainWindow(params)
-		else :
-			self.window = EditorMainWindow(params)
-
-		self.window.show()
-
-	def reject(self):
-		sys.exit()
-
-
-class SchoolMainWindow(QtGui.QMainWindow):
-	def __init__(self, params):
-		QtGui.QMainWindow.__init__(self) 
-		self.params = params		
-		self.ui = school_essay.Ui_MainWindow()
+		QtGui.QDialog.__init__(self) 		
+		self.ui = ui_schoolEssay.Ui_Dialog()
 		self.ui.setupUi(self)
 
 		self.initUiElements()
 
 	def initUiElements(self):
-		self.ui.proceedPushButton.clicked.connect(self.nextWindow)
+		pass
 
-	def combinedText(self):
-		text = str(self.ui.introTextEdit.toPlainText()).strip()
+	def getCombinedText(self):
+		text = str(self.ui.titleTextEdit.toPlainText()).strip()
+		text += "\n\n"
+		text += str(self.ui.introTextEdit.toPlainText()).strip()
 		text += "\n\n"
 		text += str(self.ui.point1TextEdit.toPlainText()).strip()
 		text += "\n\n"
@@ -87,18 +28,11 @@ class SchoolMainWindow(QtGui.QMainWindow):
 
 		return text
 
-	def nextWindow(self):
-		self.params.append(self.combinedText())
-		
-		self.close()
-		self.window = EditorMainWindow(self.params)
-		self.window.show()
-
 
 class EditorMainWindow(QtGui.QMainWindow):
-	def __init__(self, params):
+	def __init__(self):
 		QtGui.QMainWindow.__init__(self) 
-		self.params = params
+
 		self.ui = editor_window.Ui_MainWindow()
 		self.ui.setupUi(self)
 		
@@ -109,8 +43,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setupToolActions()
 
 	def initUiElements(self):
-		if len(self.params) > 3 :
-			self.ui.editorTextEdit.setPlainText(self.params[3])
+		pass
 
 	def setupFileActions(self):
 		menu = self.ui.menuFile
@@ -124,7 +57,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.actionOpen = QtGui.QAction("Open...", self,
 			priority=QtGui.QAction.LowPriority,
 			shortcut=QtGui.QKeySequence.Open,
-			triggered=self.fileNew)
+			triggered=self.fileOpen)
 		menu.addAction(self.actionOpen)
 	
 		menu.addSeparator()
@@ -194,10 +127,37 @@ class EditorMainWindow(QtGui.QMainWindow):
                 #	self.clipboardDataChanged)
 
 	def setupToolActions(self):
-		pass	
+		menu = self.ui.menuTools
+		
+		self.actionSchoolEssay = QtGui.QAction("School Essay",
+			self,
+			triggered=self.createSchoolEssay)
+		menu.addAction(self.actionSchoolEssay)
+	
+	def checkSave(self):
+		if self.ui.editorTextEdit.document().isModified():
+			return True
+		
+		shouldSave = QtGui.QMessageBox.warning(self, "Application",
+				"Do you want to save the changes you " +
+				"made to the document \"" + self.fileName +
+				"\"?", 
+				QtGui.QMesssageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
 
 	def fileNew(self):
 		pass
+		#if self.checkSave():
+
+	def fileOpen(self):
+		fileName = QtGui.QFileDialog.getOpenFileName(self, 
+		"Open File...", 
+		"~",
+		"Text-Files (*.txt);;All Files (*)")
+		
+		f = open(fileName)
+		text = f.read()
+
+		self.ui.editorTextEdit.setPlainText(text)
 	
 	def fileSave(self):
 		pass
@@ -205,8 +165,14 @@ class EditorMainWindow(QtGui.QMainWindow):
 	def fileSaveAs(self):
 		pass
 
+	def createSchoolEssay(self):
+		self.schoolEssay = SchoolDialog()
+		self.schoolEssay.exec_()
+
+		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
+
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
-	window = MyMainWindow()
+	window = EditorMainWindow()
 	window.show()
 	sys.exit(app.exec_())
