@@ -36,6 +36,8 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui = editor_window.Ui_MainWindow()
 		self.ui.setupUi(self)
 		
+		self.fileName = ""
+
 		self.initUiElements()
 		self.setupFileActions()
 		self.setupEditActions()
@@ -43,7 +45,8 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setupToolActions()
 
 	def initUiElements(self):
-		pass
+		self.ui.editorTextEdit.setFocus()
+		self.setFileName("")
 
 	def setupFileActions(self):
 		menu = self.ui.menuFile
@@ -135,41 +138,90 @@ class EditorMainWindow(QtGui.QMainWindow):
 		menu.addAction(self.actionSchoolEssay)
 	
 	def checkSave(self):
-		if self.ui.editorTextEdit.document().isModified():
+		if not self.ui.editorTextEdit.document().isModified():
 			return True
 		
 		shouldSave = QtGui.QMessageBox.warning(self, "Application",
 				"Do you want to save the changes you " +
-				"made to the document \"" + self.fileName +
+				"made to the document \"" +
+				self.windowTitle() +
 				"\"?", 
-				QtGui.QMesssageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
+				QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
+
+		if shouldSave == QtGui.QMessageBox.Save:
+			return self.fileSave()
+
+		elif shouldSave == QtGui.QMessageBox.Cancel:
+			return False
+
+		return True
 
 	def fileNew(self):
-		pass
-		#if self.checkSave():
+		if self.checkSave():
+			self.ui.editorTextEdit.clear()
+			self.setFileName("")
 
 	def fileOpen(self):
-		fileName = QtGui.QFileDialog.getOpenFileName(self, 
+		if not self.checkSave():
+			return False
+		
+		fname = QtGui.QFileDialog.getOpenFileName(self, 
 		"Open File...", 
 		"~",
 		"Text-Files (*.txt);;All Files (*)")
 		
-		f = open(fileName)
-		text = f.read()
+		if fname:
+			f = open(fname, 'r')
+			text = f.read()
+			f.close()
+			self.ui.editorTextEdit.setPlainText(text)
+			self.setFileName(fname)
+			return True
 
-		self.ui.editorTextEdit.setPlainText(text)
+		return False
 	
 	def fileSave(self):
-		pass
+		if not self.fileName:
+			return self.fileSaveAs()
+		
+		f = open(self.fileName, 'w')
+
+		if not f:
+			return False
+
+		f.write(self.ui.editorTextEdit.toPlainText())
+		f.close()
+		
+		self.ui.editorTextEdit.document().setModified(False)
+		return True
 
 	def fileSaveAs(self):
-		pass
+		fname = QtGui.QFileDialog.getSaveFileName(self, 
+			"Save as...", "~", 
+			"Text-Files (*.txt);;All Files (*)")
+
+		if not fname:
+			return False
+
+		if not str(fname).endswith('.txt'):
+			fname += ".txt"
+
+		self.setFileName(fname)
+		return self.fileSave()
 
 	def createSchoolEssay(self):
 		self.schoolEssay = SchoolDialog()
 		self.schoolEssay.exec_()
 
 		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
+		self.editorTextEdit.document().setModified(True)
+
+	def setFileName(self, name):
+		self.fileName = name
+		if self.fileName == "":
+			self.setWindowTitle("untitled")
+		else:
+			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName())
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
