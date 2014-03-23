@@ -209,12 +209,18 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setFileName(fname)
 		return self.fileSave()
 
+	def closeEvent(self, event):
+		if self.checkSave():
+			event.accept()
+		else:
+			event.ignore()
+
 	def createSchoolEssay(self):
 		self.schoolEssay = SchoolDialog()
 		self.schoolEssay.exec_()
 
 		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
-		self.editorTextEdit.document().setModified(True)
+		self.ui.editorTextEdit.document().setModified(True)
 
 	def setFileName(self, name):
 		self.fileName = name
