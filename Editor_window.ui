@@ -107,30 +107,18 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QListWidget" name="readabilityListWidget_2">
+   <widget class="QTextEdit" name="ReadabilityTextEdit">
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>330</y>
+      <y>320</y>
       <width>321</width>
       <height>191</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Comment 1</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Comment 2</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Comment 3</string>
-     </property>
-    </item>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

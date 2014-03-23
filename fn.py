@@ -69,14 +69,16 @@ class Comments:
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
-		#smriti  :: sentence number appended instead of line number. Character number and size of text to be highlighted left
+		#smriti  :: sentence number appended instead of line number. Character number and size of text to be highlighted 
 		for i in range(len(sents)):
-			if self.passive.is_passive(sents[i]):
-				self.comments.append([i, "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
+			charno = 0
 
-			tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
+			if self.passive.is_passive(sents[i]):
+				self.comments.append([i, charno, len(sents[i]), "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
+
+				tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
 			if (len(tokens) > 21):
-				self.comments.append([i, "\"" + sents[i][:20] + "...\" may be too long."])
+				self.comments.append([i, charno, len(sents[i])"\"" + sents[i][:20] + "...\" may be too long."])
 
 			adno += self.adCount(tokens)
 			sentno += 1
@@ -87,12 +89,14 @@ class Comments:
 				else :	
 					temp = self.misused(tagged[j])
 					if (temp):
-						self.comments.append([i, "\"" + sents[i][:20] + "...\": " + temp])
+						charno = re.search(tagged[j][0], sents[i]).start()
+						size = len(tagged[j][0])
+						self.comments.append([i, charno, size, "\"" + sents[i][:20] + "...\": " + temp])
 			chno += len(sents[i])
 
 		# I have currently put floweriness along with the comments
-		#	will have to reorg later
-		self.comments.append([0, "Floweriness: " + self.dec(adno*1.0/sentno) + "/sentence"])
+		# will have to reorg later
+		self.comments.append([0, 0, 0, "Floweriness: " + self.dec(adno*1.0/sentno) + "/sentence"])
 
 		return self.comments
 
