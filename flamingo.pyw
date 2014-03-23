@@ -2,6 +2,8 @@ import sys
 from PyQt4 import QtCore, QtGui
 import editor_window
 import ui_schoolEssay
+import ui_formalLetter
+import ui_debate
 
 class SchoolDialog(QtGui.QDialog):
 	def __init__(self):
@@ -130,13 +132,25 @@ class EditorMainWindow(QtGui.QMainWindow):
                 #	self.clipboardDataChanged)
 
 	def setupToolActions(self):
+	
 		menu = self.ui.menuTools
-		themes = QtGui.QMenu("Themes")
+		
+		themes = QtGui.QMenu("Choose Theme")
+		
 		self.actionSchoolEssay = QtGui.QAction("School Essay",
 			self,
 			triggered=self.createSchoolEssay)
+		self.actionFormalLetter = QtGui.QAction("Formal Letter",
+			self,
+			triggered=self.createFormalLetter)
+		self.actionDebate = QtGui.QAction("Debate",
+			self,
+			triggered=self.createDebate)
 			
 		themes.addAction(self.actionSchoolEssay)
+		themes.addAction(self.actionFormalLetter)
+		themes.addAction(self.actionDebate)
+		
 		menu.addMenu(themes)
 		menu.show()
 	
@@ -212,18 +226,21 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setFileName(fname)
 		return self.fileSave()
 
-	def closeEvent(self, event):
-		if self.checkSave():
-			event.accept()
-		else:
-			event.ignore()
-
 	def createSchoolEssay(self):
 		self.schoolEssay = SchoolDialog()
 		self.schoolEssay.exec_()
 
 		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
-		self.ui.editorTextEdit.document().setModified(True)
+		self.editorTextEdit.document().setModified(True)
+		
+	def createDebate(self):
+		pass
+		
+	#smriti - incomplete
+	def createFormalLetter(self):
+		self.formalLetter = FormalLetter()
+		self.formalLetter.exec_()
+		
 
 	def setFileName(self, name):
 		self.fileName = name
