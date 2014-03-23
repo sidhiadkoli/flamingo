@@ -30,6 +30,33 @@ class SchoolDialog(QtGui.QDialog):
 
 		return text
 
+class LetterDialog(QtGui.QDialog):
+	def __init__(self):
+		QtGui.QDialog.__init__(self) 		
+		self.ui = ui_formalLetter.Ui_Dialog()
+		self.ui.setupUi(self)
+
+		self.initUiElements()
+
+	def initUiElements(self):
+		pass
+
+	def getCombinedText(self):
+		return ""
+
+class DebateDialog(QtGui.QDialog):
+	def __init__(self):
+		QtGui.QDialog.__init__(self) 		
+		self.ui = ui_debate.Ui_Dialog()
+		self.ui.setupUi(self)
+
+		self.initUiElements()
+
+	def initUiElements(self):
+		pass
+
+	def getCombinedText(self):
+		return ""
 
 class EditorMainWindow(QtGui.QMainWindow):
 	def __init__(self):
@@ -132,28 +159,54 @@ class EditorMainWindow(QtGui.QMainWindow):
                 #	self.clipboardDataChanged)
 
 	def setupToolActions(self):
-	
 		menu = self.ui.menuTools
 		
-		themes = QtGui.QMenu("Choose Theme")
+		themes = QtGui.QMenu("Choose Theme", self)
+		menu.addMenu(themes)
 		
 		self.actionSchoolEssay = QtGui.QAction("School Essay",
 			self,
 			triggered=self.createSchoolEssay)
+		themes.addAction(self.actionSchoolEssay)
+		
 		self.actionFormalLetter = QtGui.QAction("Formal Letter",
 			self,
 			triggered=self.createFormalLetter)
+		themes.addAction(self.actionFormalLetter)
+
 		self.actionDebate = QtGui.QAction("Debate",
 			self,
 			triggered=self.createDebate)
-			
-		themes.addAction(self.actionSchoolEssay)
-		themes.addAction(self.actionFormalLetter)
 		themes.addAction(self.actionDebate)
-		
-		menu.addMenu(themes)
-		menu.show()
-	
+
+		readability = QtGui.QMenu("Set Readability", self)
+		menu.addMenu(readability)
+
+		self.actionRead1 = QtGui.QAction("Children (<=12)",
+			self,
+			triggered=self.setRead1)
+		readability.addAction(self.actionRead1)
+
+		self.actionRead2 = QtGui.QAction("Adolescence",
+			self,
+			triggered=self.setRead1)
+		readability.addAction(self.actionRead2)
+
+		self.actionRead3 = QtGui.QAction("Undergraduate",
+			self,
+			triggered=self.setRead1)
+		readability.addAction(self.actionRead3)
+
+		self.actionRead4 = QtGui.QAction("Graduate",
+			self,
+			triggered=self.setRead1)
+		readability.addAction(self.actionRead4)
+
+		self.actionRead5 = QtGui.QAction("PhD",
+			self,
+			triggered=self.setRead1)
+		readability.addAction(self.actionRead5)
+
 	def checkSave(self):
 		if not self.ui.editorTextEdit.document().isModified():
 			return True
@@ -226,21 +279,12 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setFileName(fname)
 		return self.fileSave()
 
-	def createSchoolEssay(self):
-		self.schoolEssay = SchoolDialog()
-		self.schoolEssay.exec_()
-
-		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
-		self.editorTextEdit.document().setModified(True)
-		
-	def createDebate(self):
-		pass
-		
-	#smriti - incomplete
-	def createFormalLetter(self):
-		self.formalLetter = FormalLetter()
-		self.formalLetter.exec_()
-		
+	
+	def closeEvent(self, event):
+		if self.checkSave():
+			event.accept()
+		else:
+			event.ignore()
 
 	def setFileName(self, name):
 		self.fileName = name
@@ -248,6 +292,31 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.setWindowTitle("untitled")
 		else:
 			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName())
+
+	def createSchoolEssay(self):
+		self.schoolEssay = SchoolDialog()
+		self.schoolEssay.exec_()
+
+		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
+		self.ui.editorTextEdit.document().setModified(True)
+		
+	def createDebate(self):
+		self.debate = DebateDialog()
+		self.debate.exec_()
+
+		self.ui.editorTextEdit.setPlainText(self.debate.getCombinedText())
+		self.ui.editorTextEdit.document().setModified(True)
+		
+	#smriti - incomplete
+	def createFormalLetter(self):
+		self.formalLetter = LetterDialog()
+		self.formalLetter.exec_()
+		
+		self.ui.editorTextEdit.setPlainText(self.formalLetter.getCombinedText())
+		self.ui.editorTextEdit.document().setModified(True)
+
+	def setRead1(self):
+		pass
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
