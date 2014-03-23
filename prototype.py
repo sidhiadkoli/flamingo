@@ -69,14 +69,14 @@ class Comments:
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
-
+		#smriti  :: sentence number appended instead of line number. Character number and size of text to be highlighted left
 		for i in range(len(sents)):
 			if self.passive.is_passive(sents[i]):
-				self.comments.append([chno/100+1, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
+				self.comments.append([i, "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
 
 			tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
 			if (len(tokens) > 21):
-				self.comments.append([chno/100+1, "\"" + sents[i][:20] + "...\" may be too long."])
+				self.comments.append([i, "\"" + sents[i][:20] + "...\" may be too long."])
 
 			adno += self.adCount(tokens)
 			sentno += 1
@@ -87,7 +87,7 @@ class Comments:
 				else :	
 					temp = self.misused(tagged[j])
 					if (temp):
-						self.comments.append([chno/100+1, "\"" + sents[i][:20] + "...\": " + temp])
+						self.comments.append([i, "\"" + sents[i][:20] + "...\": " + temp])
 			chno += len(sents[i])
 
 		# I have currently put floweriness along with the comments
