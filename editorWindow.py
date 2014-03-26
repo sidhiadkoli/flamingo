@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Sun Mar 23 18:13:06 2014
+# Created: Sun Mar 23 18:13:47 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,15 +61,10 @@ class Ui_MainWindow(object):
         self.editorTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.editorTextEdit.setReadOnly(False)
         self.editorTextEdit.setObjectName(_fromUtf8("editorTextEdit"))
-        self.readabilityListWidget_2 = QtGui.QListWidget(self.centralwidget)
-        self.readabilityListWidget_2.setGeometry(QtCore.QRect(550, 330, 321, 191))
-        self.readabilityListWidget_2.setObjectName(_fromUtf8("readabilityListWidget_2"))
-        item = QtGui.QListWidgetItem()
-        self.readabilityListWidget_2.addItem(item)
-        item = QtGui.QListWidgetItem()
-        self.readabilityListWidget_2.addItem(item)
-        item = QtGui.QListWidgetItem()
-        self.readabilityListWidget_2.addItem(item)
+        self.ReadabilityTextEdit = QtGui.QTextEdit(self.centralwidget)
+        self.ReadabilityTextEdit.setGeometry(QtCore.QRect(550, 320, 321, 191))
+        self.ReadabilityTextEdit.setReadOnly(True)
+        self.ReadabilityTextEdit.setObjectName(_fromUtf8("ReadabilityTextEdit"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 882, 21))
@@ -106,15 +101,6 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Comment 3", None))
         self.commentsListWidget.setSortingEnabled(__sortingEnabled)
         self.infoLabel.setText(_translate("MainWindow", "0 characters 0 words", None))
-        __sortingEnabled = self.readabilityListWidget_2.isSortingEnabled()
-        self.readabilityListWidget_2.setSortingEnabled(False)
-        item = self.readabilityListWidget_2.item(0)
-        item.setText(_translate("MainWindow", "Comment 1", None))
-        item = self.readabilityListWidget_2.item(1)
-        item.setText(_translate("MainWindow", "Comment 2", None))
-        item = self.readabilityListWidget_2.item(2)
-        item.setText(_translate("MainWindow", "Comment 3", None))
-        self.readabilityListWidget_2.setSortingEnabled(__sortingEnabled)
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
