@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
-    <height>571</height>
+    <width>882</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>651</width>
+      <width>881</width>
       <height>20</height>
      </rect>
     </property>
@@ -31,8 +31,8 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>500</y>
-      <width>661</width>
+      <y>520</y>
+      <width>891</width>
       <height>16</height>
      </rect>
     </property>
@@ -40,26 +40,13 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="Line" name="line_3">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>10</y>
-      <width>20</width>
-      <height>491</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
    <widget class="Line" name="line_4">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>530</x>
       <y>10</y>
       <width>20</width>
-      <height>491</height>
+      <height>521</height>
      </rect>
     </property>
     <property name="orientation">
@@ -69,10 +56,10 @@
    <widget class="QListWidget" name="commentsListWidget">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>550</x>
       <y>20</y>
-      <width>201</width>
-      <height>481</height>
+      <width>321</width>
+      <height>291</height>
      </rect>
     </property>
     <item>
@@ -95,7 +82,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>510</y>
+      <y>530</y>
       <width>231</width>
       <height>21</height>
      </rect>
@@ -107,10 +94,10 @@
    <widget class="QTextEdit" name="editorTextEdit">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>10</x>
       <y>20</y>
-      <width>361</width>
-      <height>481</height>
+      <width>521</width>
+      <height>501</height>
      </rect>
     </property>
     <property name="horizontalScrollBarPolicy">
@@ -120,30 +107,30 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="numberTextEdit">
+   <widget class="QListWidget" name="readabilityListWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>31</width>
-      <height>481</height>
+      <x>550</x>
+      <y>330</y>
+      <width>321</width>
+      <height>191</height>
      </rect>
     </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="readOnly">
-     <bool>true</bool>
-    </property>
-    <property name="tabStopWidth">
-     <number>0</number>
-    </property>
-    <property name="acceptRichText">
-     <bool>false</bool>
-    </property>
+    <item>
+     <property name="text">
+      <string>Comment 1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Comment 2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Comment 3</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -151,8 +138,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>654</width>
-     <height>22</height>
+     <width>882</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
