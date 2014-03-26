@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Sun Mar 23 18:13:47 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Wed Mar 26 15:28:07 2014
+#      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(882, 587)
+        MainWindow.resize(882, 591)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.line = QtGui.QFrame(self.centralwidget)
@@ -61,13 +61,13 @@ class Ui_MainWindow(object):
         self.editorTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.editorTextEdit.setReadOnly(False)
         self.editorTextEdit.setObjectName(_fromUtf8("editorTextEdit"))
-        self.ReadabilityTextEdit = QtGui.QTextEdit(self.centralwidget)
-        self.ReadabilityTextEdit.setGeometry(QtCore.QRect(550, 320, 321, 191))
-        self.ReadabilityTextEdit.setReadOnly(True)
-        self.ReadabilityTextEdit.setObjectName(_fromUtf8("ReadabilityTextEdit"))
+        self.readabilityTextEdit = QtGui.QTextEdit(self.centralwidget)
+        self.readabilityTextEdit.setGeometry(QtCore.QRect(550, 320, 321, 191))
+        self.readabilityTextEdit.setReadOnly(True)
+        self.readabilityTextEdit.setObjectName(_fromUtf8("readabilityTextEdit"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 882, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 882, 22))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))

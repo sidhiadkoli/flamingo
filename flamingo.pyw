@@ -68,6 +68,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		
 		self.fileName = ""
 		self.evaluator = fn.Comments()		
+		self.rc = fn.Readability()
 
 		self.initUiElements()
 		self.setupFileActions()
@@ -217,6 +218,13 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.evaluate)
 		menu.addAction(self.actionEvaluate)
 
+		self.actionReadability = QtGui.QAction("Calculate readability scores",
+			self,
+			shortcut=QtCore.Qt.CTRL + QtCore.Qt.Key_G,
+			triggered=self.getReadability)
+		menu.addAction(self.actionReadability)
+
+
 	def checkSave(self):
 		if not self.ui.editorTextEdit.document().isModified():
 			return True
@@ -331,9 +339,19 @@ class EditorMainWindow(QtGui.QMainWindow):
 		if str(self.ui.editorTextEdit.toPlainText()) == "":
 			return 0
 		
-		comments = self.evaluator.getComments(self.ui.editorTextEdit.toPlainText())
+		comments = self.evaluator.getComments(str(self.ui.editorTextEdit.toPlainText()))
 
-		self.ui.commentsListWidget = 
+		self.ui.commentsListWidget.clear()
+		
+		for c in comments:
+			self.ui.commentsListWidget.addItem(c[3])
+
+	def getReadability(self):
+		self.ui.readabilityTextEdit.clear()
+
+		rd = self.rc.getReadability(str(self.ui.editorTextEdit.toPlainText()))
+		for s in rd:
+			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)

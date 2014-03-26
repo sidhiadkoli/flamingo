@@ -69,20 +69,17 @@ class Comments:
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
-<<<<<<< HEAD:fn.py
+
 		#smriti :: sentence number appended instead of line number. Character number and size of text to be highlighted left
-=======
-		#smriti  :: sentence number appended instead of line number. Character number and size of text to be highlighted 
->>>>>>> fb8437fa3803b9754332c87e351f41f63c8b084f:fn.py
 		for i in range(len(sents)):
 			charno = 0
 
 			if self.passive.is_passive(sents[i]):
 				self.comments.append([i, charno, len(sents[i]), "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
 
-				tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
+			tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
 			if (len(tokens) > 21):
-				self.comments.append([i, charno, len(sents[i])"\"" + sents[i][:20] + "...\" may be too long."])
+				self.comments.append([i, charno, len(sents[i]), "\"" + sents[i][:20] + "...\" may be too long."])
 
 			adno += self.adCount(tokens)
 			sentno += 1
