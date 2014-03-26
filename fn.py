@@ -69,7 +69,7 @@ class Comments:
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
-		#smriti  :: sentence number appended instead of line number. Character number and size of text to be highlighted left
+		#smriti :: sentence number appended instead of line number. Character number and size of text to be highlighted left
 		for i in range(len(sents)):
 			if self.passive.is_passive(sents[i]):
 				self.comments.append([i, "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number

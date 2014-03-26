@@ -4,6 +4,7 @@ import editor_window
 import ui_schoolEssay
 import ui_formalLetter
 import ui_debate
+#import fn
 
 class SchoolDialog(QtGui.QDialog):
 	def __init__(self):
@@ -66,6 +67,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.setupUi(self)
 		
 		self.fileName = ""
+		self.evaluator = fn.Comments()		
 
 		self.initUiElements()
 		self.setupFileActions()
@@ -207,6 +209,14 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.setRead1)
 		readability.addAction(self.actionRead5)
 
+		menu.addSeparator()
+
+		self.actionEvaluate = QtGui.QAction("Evaluate document",
+			self,
+			shortcut=QtCore.Qt.CTRL + QtCore.Qt.Key_E,
+			triggered=self.evaluate)
+		menu.addAction(self.actionEvaluate)
+
 	def checkSave(self):
 		if not self.ui.editorTextEdit.document().isModified():
 			return True
@@ -307,7 +317,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.editorTextEdit.setPlainText(self.debate.getCombinedText())
 		self.ui.editorTextEdit.document().setModified(True)
 		
-	#smriti - incomplete
 	def createFormalLetter(self):
 		self.formalLetter = LetterDialog()
 		self.formalLetter.exec_()
@@ -317,6 +326,14 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 	def setRead1(self):
 		pass
+
+	def evaluate(self):
+		if str(self.ui.editorTextEdit.toPlainText()) == "":
+			return 0
+		
+		comments = self.evaluator.getComments(self.ui.editorTextEdit.toPlainText())
+
+		self.ui.list
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
