@@ -4,7 +4,7 @@ import editor_window
 import ui_schoolEssay
 import ui_formalLetter
 import ui_debate
-#import fn
+import fn
 
 class SchoolDialog(QtGui.QDialog):
 	def __init__(self):
@@ -333,7 +333,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		
 		comments = self.evaluator.getComments(self.ui.editorTextEdit.toPlainText())
 
-		self.ui.list
+		self.ui.commentsListWidget = 
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
