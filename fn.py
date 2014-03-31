@@ -53,9 +53,6 @@ class Comments:
 			("affect", "VB", "effect"),
 			("effect", "NN", "affect")]
 
-	def dec(self, decnum):
-		return "%.2f" %decnum
-
 	# There is redundancy here. We do not need to calculate statistics
 	#	(Cleaned up class. Further clean up is possible)	
 	# Must change the first item in comments to a suitable format.
@@ -76,11 +73,11 @@ class Comments:
 			charno = 0
 
 			if self.passive.is_passive(sents[i]):
-				self.comments.append([sents[i], "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
 
 			tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
 			if (len(tokens) > 21):
-				self.comments.append([sents[i], "\"" + sents[i][:20] + "...\" may be too long."])
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
 			adno += self.adCount(tokens)
 			sentno += 1
@@ -93,12 +90,12 @@ class Comments:
 					if (temp):
 						charno = re.search(tagged[j][0], sents[i]).start()
 						size = len(tagged[j][0])
-						self.comments.append([sents[i], "\"" + sents[i][:20] + "...\": " + temp])
+						self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + temp])
 			chno += len(sents[i])
 
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
-		self.comments.append(["" , "Floweriness: " + self.dec(adno*1.0/sentno) + "/sentence"])
+		self.comments.append(["", 0, "Floweriness: " + dec(adno*1.0/sentno) + "/sentence"])
 
 		return self.comments
 
@@ -180,32 +177,41 @@ class Readability:
 	def getReadability(self, data):
 		self.res = []
 		self.getStats(data)	
+		total = 0
 
 		#Flesch Reading ease 
 		score = 206.835 - 1.015 * self.wordno / self.sentno - 84.6 * self.sylno / self.wordno
-		self.res.append(["Flesch-Kincaid Reading Ease", score])
+		self.res.append(["Flesch-Kincaid Reading Ease", dec(score)])
 
 		#Flesch-Kincaid Grade Level
 		score = 0.39 * self.wordno / self.sentno + 11.8 * self.sylno / self.wordno - 15.59
-		self.res.append(["Flesch-Kincaid Grade Level", score])
+		total += score
+		self.res.append(["Flesch-Kincaid Grade Level", dec(score)])
 
 		#Gunning-Fog Score
 		score = 0.4 * (float(self.wordno) / self.sentno + 100.0 * self.polyno / self.wordno)
-		self.res.append(["Gunning-Fog Score", score])
+		total += score
+		self.res.append(["Gunning-Fog Score", dec(score)])
 
 		#Coleman-Liau Index
 		l = 100.0 * self.charno / self.wordno
 		s = 100.0 * self.sentno / self.wordno
 		score = 0.0588 * l - 0.296 * s - 15.8 
-		self.res.append(["Coleman-Liau Index", score])
+		total += score
+		self.res.append(["Coleman-Liau Index", dec(score)])
 
 		#SMOG Index
 		score = 1.043 * pow(self.polyno * 30.0 / self.sentno, 0.5) + 3.1291
-		self.res.append(["SMOG Index", score])
+		total += score
+		self.res.append(["SMOG Index", dec(score)])
 
 		#Automated Readability Index
 		score = 4.71 * self.charno / self.wordno + 0.5 * self.wordno / self.sentno - 21.43
-		self.res.append(["Automated Readability Index", score])
+		total += score
+		self.res.append(["Automated Readability Index", dec(score)])
+
+		self.res.append(["-------------------------------", ""])
+		self.res.append(["Average readability score", dec(total/5)])
 
 		return self.res		
 
@@ -216,6 +222,8 @@ class Readability:
 			# use reg ex. find an alternative to syllable counting
 			return [0]
 		
+def dec(decnum):
+	return "%.2f" %decnum
 
 	''' COMMENTED OUT!
 	# we no longer need the below functions. But let them be

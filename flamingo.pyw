@@ -82,6 +82,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.editorTextEdit.setFocus()
 		self.setFileName("")
 		self.clearAll()
+		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204)]
 
 	def setupFileActions(self):
 		menu = self.ui.menuFile
@@ -347,7 +348,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.comments = self.evaluator.getComments(str(self.ui.editorTextEdit.toPlainText()))
 
 		for c in self.comments:
-			self.ui.commentsListWidget.addItem(c[1])
+			self.ui.commentsListWidget.addItem(c[2])
+
+		for i in range(self.ui.commentsListWidget.count()):
+			self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[i][1]])
 
 		if not self.clickSet:
 			self.connect(self.ui.commentsListWidget, SIGNAL("itemSelectionChanged()"), self, SLOT("itemSelectedSlot()"))
