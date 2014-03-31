@@ -1,5 +1,6 @@
 import sys
 from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import pyqtSlot,SIGNAL,SLOT
 import editor_window
 import ui_schoolEssay
 import ui_formalLetter
@@ -69,6 +70,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.fileName = ""
 		self.evaluator = fn.Comments()		
 		self.rc = fn.Readability()
+		self.clickSet = False
 
 		self.initUiElements()
 		self.setupFileActions()
@@ -336,16 +338,36 @@ class EditorMainWindow(QtGui.QMainWindow):
 		pass
 
 	def evaluate(self):
+		self.ui.commentsListWidget.clear()
 		if str(self.ui.editorTextEdit.toPlainText()) == "":
 			return 0
 		
-		comments = self.evaluator.getComments(str(self.ui.editorTextEdit.toPlainText()))
+		self.comments = self.evaluator.getComments(str(self.ui.editorTextEdit.toPlainText()))
 
-		self.ui.commentsListWidget.clear()
+		for c in self.comments:
+			self.ui.commentsListWidget.addItem(c[1])
+
+		if not self.clickSet:
+			self.connect(self.ui.commentsListWidget, SIGNAL("itemClicked(QListWidgetItem*)"), self, SLOT("itemClickedSlot(QListWidgetItem*)"))
+			self.clickSet = True
 		
-		for c in comments:
-			self.ui.commentsListWidget.addItem(c[3])
+		'''
+		cu = self.ui.editorTextEdit.textCursor()
+		pos = self.ui.editorTextEdit.plainText().find(c[0])
+		cu.setPosition(pos)
+		cu.setPosition(len(c[0]), QtGui.QTextCursor.KeepAnchor)
+		self.ui.editorTextEdit.setTextCursor(cu)
+		'''
 
+	@pyqtSlot(QtGui.QListWidgetItem)
+	def itemClickedSlot(self, item):
+		com = self.comments[self.ui.commentsListWidget.row(item)][0]
+		cu = self.ui.editorTextEdit.textCursor()
+		pos = str(self.ui.editorTextEdit.toPlainText()).find(com)
+		cu.setPosition(pos)
+		cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
+		self.ui.editorTextEdit.setTextCursor(cu)
+		
 	def getReadability(self):
 		self.ui.readabilityTextEdit.clear()
 

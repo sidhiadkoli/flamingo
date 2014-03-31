@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Wed Mar 26 15:28:07 2014
+# Created: Thu Mar 27 08:38:55 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -46,6 +46,8 @@ class Ui_MainWindow(object):
         self.line_4.setObjectName(_fromUtf8("line_4"))
         self.commentsListWidget = QtGui.QListWidget(self.centralwidget)
         self.commentsListWidget.setGeometry(QtCore.QRect(550, 20, 321, 291))
+        self.commentsListWidget.setProperty("isWrapping", False)
+        self.commentsListWidget.setWordWrap(True)
         self.commentsListWidget.setObjectName(_fromUtf8("commentsListWidget"))
         item = QtGui.QListWidgetItem()
         self.commentsListWidget.addItem(item)

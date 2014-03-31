@@ -62,6 +62,12 @@
       <height>291</height>
      </rect>
     </property>
+    <property name="isWrapping" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
     <item>
      <property name="text">
       <string>Comment 1</string>
