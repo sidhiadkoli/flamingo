@@ -46,6 +46,7 @@ class LetterDialog(QtGui.QDialog):
 	def getCombinedText(self):
 		
 		#sender's address
+		text = ""
 		texttemp = str(self.ui.sendAddr1LineEdit.toPlainText()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter Sender's Address here"
@@ -129,6 +130,7 @@ class DebateDialog(QtGui.QDialog):
 
 	def getCombinedText(self):
 	
+		text = ""
 		temptext = str(self.ui.introTextEdit.toPlainText()).strip()
 		if(temptext == ""):
 			temptext = "Type Introduction here"
