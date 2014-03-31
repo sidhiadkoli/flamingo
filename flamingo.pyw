@@ -47,36 +47,36 @@ class LetterDialog(QtGui.QDialog):
 		
 		#sender's address
 		text = ""
-		texttemp = str(self.ui.sendAddr1LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.sendAddr1LineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter Sender's Address here"
 		text += texttemp
-		texttemp = str(self.ui.sendAddr2LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.sendAddr2LineEdit.text()).strip()
 		text += "\n" + texttemp
-		texttemp = str(self.ui.sendAddr3LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.sendAddr3LineEdit.text()).strip()
 		text += "\n"+ texttemp
 		text += "\n\n"
 		
 		#recv name
-		texttemp = str(self.ui.recvNameLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.recvNameLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter Receiver's name here"
 		text += texttemp
 		text += "\n"
 		
 		#recv address
-		texttemp = str(self.ui.recvAddr1LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.recvAddr1LineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter Receiver's Address here"
 		text += texttemp
-		texttemp = str(self.ui.recvAddr2LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.recvAddr2LineEdit.text()).strip()
 		text += "\n" + texttemp
-		texttemp = str(self.ui.recvAddr3LineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.recvAddr3LineEdit.text()).strip()
 		text += "\n"+ texttemp
 		text += "\n\n"
 		
 		#date
-		texttemp = str(self.ui.dateLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.dateLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter Date here"
 		text += texttemp
@@ -84,14 +84,14 @@ class LetterDialog(QtGui.QDialog):
 		
 		#subject
 		text += "Subject : "
-		texttemp = str(self.ui.subjectLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.subjectLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter subject here"
 		text += texttemp
 		text += "\n\n"
 		
 		#salutation
-		texttemp = str(self.ui.salutationLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.salutationLineEdit.text)).strip()
 		if(texttemp == ""):
 			texttemp = "Enter salutation here"
 		text += texttemp
@@ -101,14 +101,14 @@ class LetterDialog(QtGui.QDialog):
 		text += "\n\n"
 		
 		#regards
-		texttemp = str(self.ui.regardsLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.regardsLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter regards here"
 		text += texttemp
 		text += "\n\n"
 		
 		#sender's name
-		texttemp = str(self.ui.sendNameLineEdit.toPlainText()).strip()
+		texttemp = str(self.ui.sendNameLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter sender's name here"
 		text += texttemp
