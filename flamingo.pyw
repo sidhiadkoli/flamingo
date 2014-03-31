@@ -81,6 +81,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 	def initUiElements(self):
 		self.ui.editorTextEdit.setFocus()
 		self.setFileName("")
+		self.clearAll()
 
 	def setupFileActions(self):
 		menu = self.ui.menuFile
@@ -248,7 +249,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 	def fileNew(self):
 		if self.checkSave():
-			self.ui.editorTextEdit.clear()
+			self.clearAll()
 			self.setFileName("")
 
 	def fileOpen(self):
@@ -264,6 +265,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 			f = open(fname, 'r')
 			text = f.read()
 			f.close()
+			self.clearAll()
 			self.ui.editorTextEdit.setPlainText(text)
 			self.setFileName(fname)
 			return True
@@ -348,32 +350,37 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.ui.commentsListWidget.addItem(c[1])
 
 		if not self.clickSet:
-			self.connect(self.ui.commentsListWidget, SIGNAL("itemClicked(QListWidgetItem*)"), self, SLOT("itemClickedSlot(QListWidgetItem*)"))
+			self.connect(self.ui.commentsListWidget, SIGNAL("itemSelectionChanged()"), self, SLOT("itemSelectedSlot()"))
 			self.clickSet = True
-		
-		'''
-		cu = self.ui.editorTextEdit.textCursor()
-		pos = self.ui.editorTextEdit.plainText().find(c[0])
-		cu.setPosition(pos)
-		cu.setPosition(len(c[0]), QtGui.QTextCursor.KeepAnchor)
-		self.ui.editorTextEdit.setTextCursor(cu)
-		'''
 
-	@pyqtSlot(QtGui.QListWidgetItem)
-	def itemClickedSlot(self, item):
-		com = self.comments[self.ui.commentsListWidget.row(item)][0]
+	@pyqtSlot()
+	def itemSelectedSlot(self):
+		item = self.ui.commentsListWidget.currentItem()
+		row = self.ui.commentsListWidget.currentRow()
+		com = self.comments[row][0]
 		cu = self.ui.editorTextEdit.textCursor()
 		pos = str(self.ui.editorTextEdit.toPlainText()).find(com)
-		cu.setPosition(pos)
-		cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
-		self.ui.editorTextEdit.setTextCursor(cu)
 		
+		if pos == -1:
+			pass
+			#self.ui.commentsListWidget.takeItem(row)
+		else:
+			cu.setPosition(pos)
+			cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
+			self.ui.editorTextEdit.setTextCursor(cu)	
+
 	def getReadability(self):
 		self.ui.readabilityTextEdit.clear()
 
 		rd = self.rc.getReadability(str(self.ui.editorTextEdit.toPlainText()))
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
+
+	def clearAll(self):
+		self.ui.editorTextEdit.clear()
+		self.ui.readabilityTextEdit.clear()
+		self.ui.commentsListWidget.clear()
+
 
 if __name__ == '__main__':
 	app = QtGui.QApplication(sys.argv)
