@@ -44,7 +44,77 @@ class LetterDialog(QtGui.QDialog):
 		pass
 
 	def getCombinedText(self):
-		return ""
+		
+		#sender's address
+		texttemp = str(self.ui.sendAddr1LineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter Sender's Address here"
+		text += texttemp
+		texttemp = str(self.ui.sendAddr2LineEdit.toPlainText()).strip()
+		text += "\n" + texttemp
+		texttemp = str(self.ui.sendAddr3LineEdit.toPlainText()).strip()
+		text += "\n"+ texttemp
+		text += "\n\n"
+		
+		#recv name
+		texttemp = str(self.ui.recvNameLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter Receiver's name here"
+		text += texttemp
+		text += "\n"
+		
+		#recv address
+		texttemp = str(self.ui.recvAddr1LineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter Receiver's Address here"
+		text += texttemp
+		texttemp = str(self.ui.recvAddr2LineEdit.toPlainText()).strip()
+		text += "\n" + texttemp
+		texttemp = str(self.ui.recvAddr3LineEdit.toPlainText()).strip()
+		text += "\n"+ texttemp
+		text += "\n\n"
+		
+		#date
+		texttemp = str(self.ui.dateLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter Date here"
+		text += texttemp
+		text += "\n\n"
+		
+		#subject
+		text += "Subject : "
+		texttemp = str(self.ui.subjectLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter subject here"
+		text += texttemp
+		text += "\n\n"
+		
+		#salutation
+		texttemp = str(self.ui.salutationLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter salutation here"
+		text += texttemp
+		text += "\n\n"
+		
+		#content
+		text += "\n\n"
+		
+		#regards
+		texttemp = str(self.ui.regardsLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter regards here"
+		text += texttemp
+		text += "\n\n"
+		
+		#sender's name
+		texttemp = str(self.ui.sendNameLineEdit.toPlainText()).strip()
+		if(texttemp == ""):
+			texttemp = "Enter sender's name here"
+		text += texttemp
+		text += "\n\n"
+		
+		return text
+		
 
 class DebateDialog(QtGui.QDialog):
 	def __init__(self):
@@ -58,7 +128,27 @@ class DebateDialog(QtGui.QDialog):
 		pass
 
 	def getCombinedText(self):
-		return ""
+	
+		temptext = str(self.ui.introTextEdit.toPlainText()).strip()
+		if(temptext == ""):
+			temptext = "Type Introduction here"
+		text += temptext	
+		text += "\n\n"
+		temptext = str(self.ui.arg1TextEdit.toPlainText()).strip()
+		if(temptext != ""):
+			text += temptext
+			text += "\n\n"
+		temptext = str(self.ui.arg2TextEdit.toPlainText()).strip()
+		if(temptext != ""):
+			text += temptext
+			text += "\n\n"
+		temptext = str(self.ui.arg3TextEdit.toPlainText()).strip()
+		if(temptext != ""):
+			text += temptext
+			text += "\n\n"
+		text += "Type conclusion here."
+
+		return text
 
 class EditorMainWindow(QtGui.QMainWindow):
 	def __init__(self):
