@@ -91,7 +91,7 @@ class LetterDialog(QtGui.QDialog):
 		text += "\n\n"
 		
 		#salutation
-		texttemp = str(self.ui.salutationLineEdit.text)).strip()
+		texttemp = str(self.ui.salutationLineEdit.text()).strip()
 		if(texttemp == ""):
 			texttemp = "Enter salutation here"
 		text += texttemp
