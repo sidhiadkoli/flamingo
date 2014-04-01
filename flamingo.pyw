@@ -188,31 +188,45 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		readability = QtGui.QMenu("Set Readability", self)
 		menu.addMenu(readability)
+		
+		ag = QtGui.QActionGroup(self, exclusive=True)
 
-		self.actionRead1 = QtGui.QAction("Children (<=12)",
+		self.actionRead0 = QtGui.QAction("None",
 			self,
+			checkable=True,
+			checked=True,
 			triggered=self.setRead1)
-		readability.addAction(self.actionRead1)
+		readability.addAction(ag.addAction(self.actionRead0))
+		
+		self.actionRead1 = QtGui.QAction("Children (<=12)",
+			self,			
+			checkable=True,
+			triggered=self.setRead1)
+		readability.addAction(ag.addAction(self.actionRead1))
 
 		self.actionRead2 = QtGui.QAction("Adolescence",
-			self,
+			self,			
+			checkable=True,
 			triggered=self.setRead1)
-		readability.addAction(self.actionRead2)
+		readability.addAction(ag.addAction(self.actionRead2))
 
 		self.actionRead3 = QtGui.QAction("Undergraduate",
-			self,
+			self,			
+			checkable=True,
 			triggered=self.setRead1)
-		readability.addAction(self.actionRead3)
+		readability.addAction(ag.addAction(self.actionRead3))
 
 		self.actionRead4 = QtGui.QAction("Graduate",
-			self,
+			self,			
+			checkable=True,
 			triggered=self.setRead1)
-		readability.addAction(self.actionRead4)
+		readability.addAction(ag.addAction(self.actionRead4))
 
 		self.actionRead5 = QtGui.QAction("PhD",
-			self,
+			self,			
+			checkable=True,
 			triggered=self.setRead1)
-		readability.addAction(self.actionRead5)
+		readability.addAction(ag.addAction(self.actionRead5))
 
 		menu.addSeparator()
 
@@ -365,12 +379,12 @@ class EditorMainWindow(QtGui.QMainWindow):
 		cu = self.ui.editorTextEdit.textCursor()
 		pos = str(self.ui.editorTextEdit.toPlainText()).find(com)
 		
-		if pos == -1:
-			pass
-			#self.ui.commentsListWidget.takeItem(row)
-		else:
+		if pos != -1:
 			cu.setPosition(pos)
 			cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
+			self.ui.editorTextEdit.setTextCursor(cu)
+		else:
+			cu.setPosition(0)
 			self.ui.editorTextEdit.setTextCursor(cu)	
 
 	def getReadability(self):
