@@ -158,11 +158,13 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		self.ui = editor_window.Ui_MainWindow()
 		self.ui.setupUi(self)
+		self.readabilities = {"None": None,"Children":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}
 		
 		self.fileName = ""
 		self.evaluator = fn.Comments()		
 		self.rc = fn.Readability()
 		self.clickSet = False
+		self.targetReadability = self.readabilities["None"]
 
 		self.initUiElements()
 		self.setupFileActions()
@@ -319,7 +321,9 @@ class EditorMainWindow(QtGui.QMainWindow):
 			checkable=True,
 			triggered=self.setRead1)
 		readability.addAction(ag.addAction(self.actionRead5))
-
+		
+		ag.triggered.connect(self.setReadability)
+		#self.connect(ag, SIGNAL("triggered(QtGui.QAction *action)"), self.setReadability)	
 		menu.addSeparator()
 
 		self.actionEvaluate = QtGui.QAction("Evaluate document",
@@ -334,6 +338,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.getReadability)
 		menu.addAction(self.actionReadability)
 
+	#@pyqtSlot(QtGui.QAction)
+	def setReadability(self, currentAction):
+		self.targetReadability = self.readabilities[str(currentAction.text())]
+				
 
 	def checkSave(self):
 		if not self.ui.editorTextEdit.document().isModified():
@@ -460,10 +468,11 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[i][1]])
 
 		if not self.clickSet:
-			self.connect(self.ui.commentsListWidget, SIGNAL("itemSelectionChanged()"), self, SLOT("itemSelectedSlot()"))
+			self.ui.commentsListWidget.itemSelectionChanged.connect(self.itemSelectedSlot)
+			#self.connect(self.ui.commentsListWidget, SIGNAL("itemSelectionChanged()"), self, SLOT("itemSelectedSlot()"))
 			self.clickSet = True
 
-	@pyqtSlot()
+	#@pyqtSlot()
 	def itemSelectedSlot(self):
 		item = self.ui.commentsListWidget.currentItem()
 		row = self.ui.commentsListWidget.currentRow()
@@ -483,6 +492,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.readabilityTextEdit.clear()
 
 		rd = self.rc.getReadability(str(self.ui.editorTextEdit.toPlainText()))
+		#self.ui.readabilityTextEdit.append(str(self.targetReadability) + "\n")
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
