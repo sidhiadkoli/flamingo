@@ -178,6 +178,8 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.clearAll()
 		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204)]
 
+		self.ui.editorTextEdit.cursorPositionChanged.connect(self.updateCursorPosition)
+
 	def setupFileActions(self):
 		menu = self.ui.menuFile
 		
@@ -341,7 +343,13 @@ class EditorMainWindow(QtGui.QMainWindow):
 	#@pyqtSlot(QtGui.QAction)
 	def setReadability(self, currentAction):
 		self.targetReadability = self.readabilities[str(currentAction.text())]
-				
+
+	def updateCursorPosition(self):
+		line = self.ui.editorTextEdit.textCursor().blockNumber()
+		col = self.ui.editorTextEdit.textCursor().columnNumber()
+		status = ("Line: " + str(line) + ", " + "Column: "
+				+ str(col))
+		self.statusBar().showMessage(status)
 
 	def checkSave(self):
 		if not self.ui.editorTextEdit.document().isModified():
@@ -492,7 +500,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.readabilityTextEdit.clear()
 
 		rd = self.rc.getReadability(str(self.ui.editorTextEdit.toPlainText()))
-		#self.ui.readabilityTextEdit.append(str(self.targetReadability) + "\n")
+
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 

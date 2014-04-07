@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>882</width>
-    <height>591</height>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,19 +83,6 @@
       <string>Comment 3</string>
      </property>
     </item>
-   </widget>
-   <widget class="QLabel" name="infoLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>530</y>
-      <width>231</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0 characters 0 words</string>
-    </property>
    </widget>
    <widget class="QTextEdit" name="editorTextEdit">
     <property name="geometry">
