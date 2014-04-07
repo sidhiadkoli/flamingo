@@ -128,12 +128,8 @@ class Comments:
 class Readability:
 	def __init__(self):
 		self.res = []
-		self.chno = 0
-		self.charno = 0
-		self.sylno = 0
-		self.wordno = 0
-		self.sentno = 0
-		self.polyno = 0
+		
+		self.clearAll()
 	
 		self.rep = []
 		self.rep.append(["Number of characters", 0])
@@ -145,8 +141,16 @@ class Readability:
 		self.regexp = re.compile('\A[^a-zA-Z]')
 		self.di = cmudict.dict() 
 
-	
+	def clearAll(self):
+		self.chno = 0
+		self.charno = 0
+		self.sylno = 0
+		self.wordno = 0
+		self.sentno = 0
+		self.polyno = 0	
+
 	def getStats(self, data):
+		self.clearAll()
 		sents = nltk.tokenize.sent_tokenize(data)
 		self.sentno = len(sents)
 
@@ -164,6 +168,11 @@ class Readability:
 					self.wordno += 1
 	
 			self.chno += len(sent)
+		
+		if self.charno == 0:
+			return False
+
+		return True
 
 	def getResultData(self):
 		self.rep[0][1] = self.charno
@@ -176,7 +185,8 @@ class Readability:
 
 	def getReadability(self, data):
 		self.res = []
-		self.getStats(data)	
+		if not self.getStats(data):
+			return []
 		total = 0
 
 		#Flesch Reading ease 

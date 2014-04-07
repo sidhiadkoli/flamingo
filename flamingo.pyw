@@ -165,6 +165,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.rc = fn.Readability()
 		self.clickSet = False
 		self.targetReadability = self.readabilities["None"]
+		self.textEdit = self.ui.editorTextEdit
 
 		self.initUiElements()
 		self.setupFileActions()
@@ -173,12 +174,12 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setupToolActions()
 
 	def initUiElements(self):
-		self.ui.editorTextEdit.setFocus()
+		self.textEdit.setFocus()
 		self.setFileName("")
 		self.clearAll()
 		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204)]
 
-		self.ui.editorTextEdit.cursorPositionChanged.connect(self.updateCursorPosition)
+		self.textEdit.cursorPositionChanged.connect(self.updateCursorPosition)
 
 	def setupFileActions(self):
 		menu = self.ui.menuFile
@@ -199,7 +200,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		self.actionSave = QtGui.QAction("Save", self,
 			shortcut=QtGui.QKeySequence.Save,
-			enabled=self.ui.editorTextEdit.document().isModified(),
+			enabled=self.textEdit.document().isModified(),
 			triggered=self.fileSave)
 		menu.addAction(self.actionSave)
 
@@ -214,15 +215,15 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		self.actionUndo = QtGui.QAction("Undo", self,
 			shortcut=QtGui.QKeySequence.Undo,
-			enabled=self.ui.editorTextEdit.document().isUndoAvailable(),
-			triggered=self.ui.editorTextEdit.undo)
+			enabled=self.textEdit.document().isUndoAvailable(),
+			triggered=self.textEdit.undo)
 		menu.addAction(self.actionUndo)
 
 		self.actionRedo = QtGui.QAction("Redo", self,
 			priority=QtGui.QAction.LowPriority,
 			shortcut=QtGui.QKeySequence.Redo,
-			enabled=self.ui.editorTextEdit.document().isRedoAvailable(),
-			triggered=self.ui.editorTextEdit.redo)
+			enabled=self.textEdit.document().isRedoAvailable(),
+			triggered=self.textEdit.redo)
 		menu.addAction(self.actionRedo)	
 
 		menu.addSeparator()
@@ -231,32 +232,32 @@ class EditorMainWindow(QtGui.QMainWindow):
 			priority=QtGui.QAction.LowPriority,
 			shortcut=QtGui.QKeySequence.Cut,
 			enabled=False,
-			triggered=self.ui.editorTextEdit.cut)
+			triggered=self.textEdit.cut)
 		menu.addAction(self.actionCut)
 
 		self.actionCopy = QtGui.QAction("Copy", self,
 			priority=QtGui.QAction.LowPriority,
 			shortcut=QtGui.QKeySequence.Copy,
 			enabled=False,
-			triggered=self.ui.editorTextEdit.copy)
+			triggered=self.textEdit.copy)
 		menu.addAction(self.actionCopy)
 
 		self.actionPaste = QtGui.QAction("Paste", self,
 			priority=QtGui.QAction.LowPriority,
 			shortcut=QtGui.QKeySequence.Paste,
 			enabled=(len(QtGui.QApplication.clipboard().text()) != 0),
-			triggered=self.ui.editorTextEdit.paste)
+			triggered=self.textEdit.paste)
 		menu.addAction(self.actionPaste)
 
 	def setupEditorProperties(self):
-		self.ui.editorTextEdit.document().modificationChanged.connect(self.actionSave.setEnabled)
-		self.ui.editorTextEdit.document().modificationChanged.connect(self.setWindowModified)
-		self.ui.editorTextEdit.document().undoAvailable.connect(self.actionUndo.setEnabled)
-		self.ui.editorTextEdit.document().redoAvailable.connect(self.actionRedo.setEnabled)
-		self.setWindowModified(self.ui.editorTextEdit.document().isModified())
+		self.textEdit.document().modificationChanged.connect(self.actionSave.setEnabled)
+		self.textEdit.document().modificationChanged.connect(self.setWindowModified)
+		self.textEdit.document().undoAvailable.connect(self.actionUndo.setEnabled)
+		self.textEdit.document().redoAvailable.connect(self.actionRedo.setEnabled)
+		self.setWindowModified(self.textEdit.document().isModified())
 
-		self.ui.editorTextEdit.copyAvailable.connect(self.actionCut.setEnabled)
-		self.ui.editorTextEdit.copyAvailable.connect(self.actionCopy.setEnabled)
+		self.textEdit.copyAvailable.connect(self.actionCut.setEnabled)
+		self.textEdit.copyAvailable.connect(self.actionCopy.setEnabled)
 
 		#QtGui.QApplication.clipboard().dataChanged.connect(
                 #	self.clipboardDataChanged)
@@ -340,19 +341,28 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.getReadability)
 		menu.addAction(self.actionReadability)
 
+		menu.addSeparator()
+
+
+		self.actionAutoRead = QtGui.QAction("Auto evaluate readability",
+			self,
+			checkable=True,
+			triggered=self.autoRead)
+		menu.addAction(self.actionAutoRead) 
+
 	#@pyqtSlot(QtGui.QAction)
 	def setReadability(self, currentAction):
 		self.targetReadability = self.readabilities[str(currentAction.text())]
 
 	def updateCursorPosition(self):
-		line = self.ui.editorTextEdit.textCursor().blockNumber()
-		col = self.ui.editorTextEdit.textCursor().columnNumber()
+		line = self.textEdit.textCursor().blockNumber() + 1
+		col = self.textEdit.textCursor().columnNumber()
 		status = ("Line: " + str(line) + ", " + "Column: "
 				+ str(col))
 		self.statusBar().showMessage(status)
 
 	def checkSave(self):
-		if not self.ui.editorTextEdit.document().isModified():
+		if not self.textEdit.document().isModified():
 			return True
 		
 		shouldSave = QtGui.QMessageBox.warning(self, "Application",
@@ -386,10 +396,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 		
 		if fname:
 			f = open(fname, 'r')
-			text = f.read()
+			textData = f.read()
 			f.close()
 			self.clearAll()
-			self.ui.editorTextEdit.setPlainText(text)
+			self.textEdit.setPlainText(textData)
 			self.setFileName(fname)
 			return True
 
@@ -404,10 +414,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 		if not f:
 			return False
 
-		f.write(self.ui.editorTextEdit.toPlainText())
+		f.write(self.textEdit.toPlainText())
 		f.close()
 		
-		self.ui.editorTextEdit.document().setModified(False)
+		self.textEdit.document().setModified(False)
 		return True
 
 	def fileSaveAs(self):
@@ -442,32 +452,32 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.schoolEssay = SchoolDialog()
 		self.schoolEssay.exec_()
 
-		self.ui.editorTextEdit.setPlainText(self.schoolEssay.getCombinedText())
-		self.ui.editorTextEdit.document().setModified(True)
+		self.textEdit.setPlainText(self.schoolEssay.getCombinedText())
+		self.textEdit.document().setModified(True)
 		
 	def createDebate(self):
 		self.debate = DebateDialog()
 		self.debate.exec_()
 
-		self.ui.editorTextEdit.setPlainText(self.debate.getCombinedText())
-		self.ui.editorTextEdit.document().setModified(True)
+		self.textEdit.setPlainText(self.debate.getCombinedText())
+		self.textEdit.document().setModified(True)
 		
 	def createFormalLetter(self):
 		self.formalLetter = LetterDialog()
 		self.formalLetter.exec_()
 		
-		self.ui.editorTextEdit.setPlainText(self.formalLetter.getCombinedText())
-		self.ui.editorTextEdit.document().setModified(True)
+		self.textEdit.setPlainText(self.formalLetter.getCombinedText())
+		self.textEdit.document().setModified(True)
 
 	def setRead1(self):
 		pass
 
 	def evaluate(self):
 		self.ui.commentsListWidget.clear()
-		if str(self.ui.editorTextEdit.toPlainText()) == "":
+		if str(self.textEdit.toPlainText()) == "":
 			return 0
 		
-		self.comments = self.evaluator.getComments(str(self.ui.editorTextEdit.toPlainText()))
+		self.comments = self.evaluator.getComments(str(self.textEdit.toPlainText()))
 
 		for c in self.comments:
 			self.ui.commentsListWidget.addItem(c[2])
@@ -485,27 +495,35 @@ class EditorMainWindow(QtGui.QMainWindow):
 		item = self.ui.commentsListWidget.currentItem()
 		row = self.ui.commentsListWidget.currentRow()
 		com = self.comments[row][0]
-		cu = self.ui.editorTextEdit.textCursor()
-		pos = str(self.ui.editorTextEdit.toPlainText()).find(com)
+		cu = self.textEdit.textCursor()
+		pos = str(self.textEdit.toPlainText()).find(com)
 		
 		if pos != -1:
 			cu.setPosition(pos)
 			cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
-			self.ui.editorTextEdit.setTextCursor(cu)
+			self.textEdit.setTextCursor(cu)
 		else:
 			cu.setPosition(0)
-			self.ui.editorTextEdit.setTextCursor(cu)	
+			self.textEdit.setTextCursor(cu)	
 
 	def getReadability(self):
 		self.ui.readabilityTextEdit.clear()
 
-		rd = self.rc.getReadability(str(self.ui.editorTextEdit.toPlainText()))
+		rd = self.rc.getReadability(str(self.textEdit.toPlainText()))
 
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
+	def autoRead(self):
+		if self.actionAutoRead.isChecked() == True:
+			self.actionReadability.setDisabled(True) 
+			self.textEdit.textChanged.connect(self.getReadability)
+		else:
+			self.actionReadability.setDisabled(False)
+			self.textEdit.textChanged.disconnect()
+
 	def clearAll(self):
-		self.ui.editorTextEdit.clear()
+		self.textEdit.clear()
 		self.ui.readabilityTextEdit.clear()
 		self.ui.commentsListWidget.clear()
 
