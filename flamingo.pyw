@@ -158,7 +158,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		self.ui = editor_window.Ui_MainWindow()
 		self.ui.setupUi(self)
-		self.readabilities = {"None": None,"Children":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}
+		self.readabilities = {"None": None,"Children (<=12)":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}
 		
 		self.fileName = ""
 		self.evaluator = fn.Comments()		
@@ -177,7 +177,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.textEdit.setFocus()
 		self.setFileName("")
 		self.clearAll()
-		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204)]
+		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204), QtGui.QColor(255, 255, 255)]
 
 		self.textEdit.cursorPositionChanged.connect(self.updateCursorPosition)
 
@@ -342,7 +342,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 		menu.addAction(self.actionReadability)
 
 		menu.addSeparator()
-
 
 		self.actionAutoRead = QtGui.QAction("Auto evaluate readability",
 			self,
@@ -511,8 +510,20 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		rd = self.rc.getReadability(str(self.textEdit.toPlainText()))
 
+		if not rd:
+			return False
+
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
+
+		avg = float(rd[len(rd) - 1][1])
+		if self.targetReadability and (avg > self.targetReadability[1] or avg < self.targetReadability[0]):
+			self.ui.readabilityTextEdit.setTextBackgroundColor(self.colour[1])
+		else :
+			self.ui.readabilityTextEdit.setTextBackgroundColor(self.colour[2])
+
+
+		return True
 
 	def autoRead(self):
 		if self.actionAutoRead.isChecked() == True:

@@ -73,15 +73,19 @@ class Comments:
 			charno = 0
 
 			if self.passive.is_passive(sents[i]):
-				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) #smriti:: changed to sentence number instead of line number
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
 
-			tokens = nltk.tokenize.word_tokenize(sents[i][:-1])
+			tokens = nltk.tokenize.word_tokenize(sents[i])
 			if (len(tokens) > 21):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
-			adno += self.adCount(tokens)
 			sentno += 1
 			tagged = nltk.pos_tag(tokens)
+			adno += self.adCount(tagged)
+
+			if self.endsWithPrep(tagged):
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\": " + "ends with a preposition. Consider revising."])
+
 			for j in range(len(tokens)):
 				if (self.regexp.search(tokens[j])) :
 					pass
@@ -111,8 +115,7 @@ class Comments:
 				return self.message(p[2])
 		return None
 
-	def adCount(self, tokens):
-		tagged = nltk.pos_tag(tokens)
+	def adCount(self, tagged):
 		mydict = dict(tagged)
 		pos2 = nltk.Index((value, key) for (key, value) in mydict.items())
 		adj =  pos2['JJ']	 #adj
@@ -124,6 +127,11 @@ class Comments:
 		
 		return len(adj)+len(adv)
 
+	def endsWithPrep(self, tagged):
+		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":
+			return True
+		return False
+	
 # Should think about exact format of data we return
 class Readability:
 	def __init__(self):
@@ -155,7 +163,7 @@ class Readability:
 		self.sentno = len(sents)
 
 		for sent in sents:
-			words = nltk.tokenize.word_tokenize(sent[:-1])
+			words = nltk.tokenize.word_tokenize(sent)
 
 			for word in words:
 				if (self.regexp.search(word)) :
