@@ -45,6 +45,8 @@ class Comments:
 		self.passive = IsPassive()
 		self.regexp = re.compile('\A[^a-zA-Z]')
 		
+		self.initFreqData()
+		
 		# Smriti :: add more words
 		self.misused_list = [("accept", "VB", "except"),
 			("except", "NN", "accept"),
@@ -52,6 +54,12 @@ class Comments:
 			("then", "RB", "than"),
 			("affect", "VB", "effect"),
 			("effect", "NN", "affect")]
+
+	def initFreqData(self):
+		self.words = FreqDist()
+		for sentence in brown.sents():
+			for word in sentence:
+				self.words.inc(word.lower())
 
 	#	(Cleaned up class. Further clean up is possible)	
 	def getComments(self, data) :
@@ -94,8 +102,9 @@ class Comments:
 
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
-		self.comments.append(["", 0, "Number of Adjectives per Sentence: " + dec(adno*1.0/sentno)])
-		self.comments.append(["", 0, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno)])
+		self.comments.append(["", 2, "Number of Adjectives per Sentence: " + dec(adno*1.0/sentno)])
+
+		self.comments.append(["", 2, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno)])
 
 		return self.comments
 
@@ -106,7 +115,6 @@ class Comments:
 	# Gives error for words containing words in the misused list.
 	# eg: exceptional, affection
 	# Must be corrected.
-	
 	def misused(self, token):
 		for p in self.misused_list:
 			if (token[0][:len(p[0])].lower() == p[0] and token[1][:2] != p[1] ):
@@ -114,28 +122,21 @@ class Comments:
 		return None
 		
 	def rareCount(self, tokens):
-		words = FreqDist()
 		count = 0
-		for sentence in brown.sents():
-			for word in sentence:
-				words.inc(word.lower())
 		for token in tokens:
-			if(word.freq(token)<=5):
+			if(self.words[token]<=5 and self.words[token]>0):				
 				count+=1
 		return count
 	
-	# Smriti :: fix bug in logic
 	def adCount(self, tagged):
-		mydict = dict(tagged)
-		pos2 = nltk.Index((value, key) for (key, value) in mydict.items())
-		adj =  pos2['JJ']	 #adj
-		adj += pos2['JJR']	#adj, comparative
-		adj += pos2['JJS']	#adj, superlative
-		adv =  pos2['RB']	 #adv
-		adv += pos2['RBR']	#adv, comparative
-		adv += pos2['RBS']	#adv, superlative
-		
-		return len(adj)+len(adv)
+		adj = 0
+		adv = 0
+		for i in tagged:
+			if (i[1] == 'JJ' or i[1] == 'JJR' or i[1] == 'JJS'):
+				adj += 1
+			if (i[1] == 'RB' or i[1] == 'RBR' or i[1] == 'RBS'):
+				adv += 1
+		return adj + adv
 
 	def endsWithPrep(self, tagged):
 		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":
