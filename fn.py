@@ -95,7 +95,7 @@ class Comments:
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
 		self.comments.append(["", 0, "Number of Adjectives per Sentence: " + dec(adno*1.0/sentno)])
-		self.comments.append(["", 0, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno))
+		self.comments.append(["", 0, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno)])
 
 		return self.comments
 
