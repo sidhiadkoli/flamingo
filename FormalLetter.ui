@@ -78,7 +78,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="salutationLineEdit_2">
+  <widget class="QLineEdit" name="salutationLineEdit">
    <property name="geometry">
     <rect>
      <x>270</x>

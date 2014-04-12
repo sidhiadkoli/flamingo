@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'FormalLetter.ui'
 #
-# Created: Sun Apr 13 00:01:04 2014
+# Created: Sat Apr 12 23:13:50 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -49,9 +49,9 @@ class Ui_Dialog(object):
         self.subjectLineEdit = QtGui.QLineEdit(Dialog)
         self.subjectLineEdit.setGeometry(QtCore.QRect(270, 290, 331, 21))
         self.subjectLineEdit.setObjectName(_fromUtf8("subjectLineEdit"))
-        self.salutationLineEdit_2 = QtGui.QLineEdit(Dialog)
-        self.salutationLineEdit_2.setGeometry(QtCore.QRect(270, 330, 331, 21))
-        self.salutationLineEdit_2.setObjectName(_fromUtf8("salutationLineEdit_2"))
+        self.salutationLineEdit = QtGui.QLineEdit(Dialog)
+        self.salutationLineEdit.setGeometry(QtCore.QRect(270, 330, 331, 21))
+        self.salutationLineEdit.setObjectName(_fromUtf8("salutationLineEdit"))
         self.contentLineEdit = QtGui.QLineEdit(Dialog)
         self.contentLineEdit.setGeometry(QtCore.QRect(270, 370, 331, 21))
         self.contentLineEdit.setReadOnly(True)
