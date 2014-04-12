@@ -4,7 +4,10 @@ import re
 import postagger
 import curses.ascii
 from nltk.corpus import cmudict
+from nltk.corpus import brown
+from nltk.probability import *
 from itertools import dropwhile
+
 
 class IsPassive:
 
@@ -62,6 +65,7 @@ class Comments:
 		chno = 0
 		sentno = 0
 		adno = 0
+		rareno = 0
 		##
 		self.comments = []
 
@@ -76,6 +80,8 @@ class Comments:
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
 
 			tokens = nltk.tokenize.word_tokenize(sents[i])
+			rareno += self.rareCount(tokens)
+			
 			if (len(tokens) > 21):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
@@ -99,7 +105,8 @@ class Comments:
 
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
-		self.comments.append(["", 0, "Floweriness: " + dec(adno*1.0/sentno) + "/sentence"])
+		self.comments.append(["", 0, "Number of Adjectives per Sentence: " + dec(adno*1.0/sentno)])
+		self.comments.append(["", 0, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno))
 
 		return self.comments
 
@@ -109,12 +116,24 @@ class Comments:
 	# Gives error for words containing words in the misused list.
 	# eg: exceptional, affection
 	# Must be corrected.
+	
 	def misused(self, token):
 		for p in self.misused_list:
 			if (token[0][:len(p[0])].lower() == p[0] and token[1][:2] != p[1] ):
 				return self.message(p[2])
 		return None
-
+		
+	def rareCount(self, tokens):
+		words = FreqDist()
+		count = 0
+		for sentence in brown.sents():
+			for word in sentence:
+				words.inc(word.lower())
+		for token in tokens:
+			if(word.freq(token)<=5):
+				count+=1
+		return count
+				
 	def adCount(self, tagged):
 		mydict = dict(tagged)
 		pos2 = nltk.Index((value, key) for (key, value) in mydict.items())

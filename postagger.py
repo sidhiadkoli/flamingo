@@ -18,7 +18,7 @@ TAGGER = None
 def create_tagger():
 	"""Train a tagger from the Brown Corpus. This should not be called very
 	often; only in the event that the tagger pickle wasn't found."""
-	print "Building tagger..."
+	#print "Building tagger..."
 	train_sents = brown.tagged_sents()
 
 	t0 = nltk.RegexpTagger(
@@ -32,16 +32,16 @@ def create_tagger():
 		 (r'.*ed$', 'VBD'),			   # past tense verbs
 		 (r'.*', 'NN')					# nouns (default)
 		])
-	print "got t0"
+	#print "got t0"
 
 	t1 = nltk.UnigramTagger(train_sents, backoff=t0)
-	print "got t1"
+	#print "got t1"
 
 	t2 = nltk.BigramTagger(train_sents, backoff=t1)
-	print "got t2"
+	#print "got t2"
 
 	t3 = nltk.TrigramTagger(train_sents, backoff=t2)
-	print "Built tagger!"
+	#print "Built tagger!"
 	return t3
 
 def save_tagger(tagger):
