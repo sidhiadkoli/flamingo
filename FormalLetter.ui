@@ -65,7 +65,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Line 2</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="sendNameLineEdit">
@@ -203,7 +203,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Line 1</string>
+    <string/>
    </property>
   </widget>
   <widget class="Line" name="line_3">

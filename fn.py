@@ -1,5 +1,4 @@
 import nltk
-#import sys
 import re
 import postagger
 import curses.ascii
@@ -10,15 +9,13 @@ from itertools import dropwhile
 
 
 class IsPassive:
-
 	def __init__(self):
 		self.TAGGER = postagger.get_tagger()
 
-	def tag_sentence(self, sent):
-		"""Take a sentence as a string and return 
+	def tag_tokens(self, tokens):
+		"""Take tokens and return 
 			a list of (word, tag) tuples."""
 
-		tokens = nltk.word_tokenize(sent)
 		return self.TAGGER.tag(tokens)
 
 	def passivep(self, tags):
@@ -26,29 +23,29 @@ class IsPassive:
 			we think this is a passive sentence."""
 		
 		postToBe = list(dropwhile(lambda(tag): not tag.startswith("BE"), tags))
-		nongerund = lambda(tag): tag.startswith("V") and not tag.startswith("VBG")
+
+		nongerund = lambda(tag): tag.startswith("V") and not (tag.startswith("VBG") or tag == "VB")
 
 		filtered = filter(nongerund, postToBe)
 		out = any(filtered)
 
 		return out
 
-	def is_passive(self, sent):
-		"""Given a sentence, tag it and print if we think 
+	def is_passive(self, tokens):
+		"""Given tokens, tag it and print if we think 
 		it's a passive-voice formation."""
-		tagged = self.tag_sentence(sent)
+		tagged = self.tag_tokens(tokens)
 		tags = map( lambda(tup): tup[1], tagged)
 
 		return self.passivep(tags)
 
-# Do we really need regexp? Consider.
 class Comments:
 	def __init__(self):
 		self.comments = []
 		self.passive = IsPassive()
 		self.regexp = re.compile('\A[^a-zA-Z]')
 		
-		# must add more words
+		# Smriti :: add more words
 		self.misused_list = [("accept", "VB", "except"),
 			("except", "NN", "accept"),
 			("than", "IN", "then"),
@@ -56,30 +53,22 @@ class Comments:
 			("affect", "VB", "effect"),
 			("effect", "NN", "affect")]
 
-	# There is redundancy here. We do not need to calculate statistics
 	#	(Cleaned up class. Further clean up is possible)	
-	# Must change the first item in comments to a suitable format.
-	#	It currently calculates line number.
 	def getComments(self, data) :
-		## variables
-		chno = 0
 		sentno = 0
 		adno = 0
 		rareno = 0
-		##
+		
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
 
-		#smriti :: sentence number appended instead of line number. Character number and size of text to be highlighted left
-		# Sidhi :: Changed to entire sentence
 		for i in range(len(sents)):
-			charno = 0
+			tokens = nltk.tokenize.word_tokenize(sents[i])
 
-			if self.passive.is_passive(sents[i]):
+			if self.passive.is_passive(tokens):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
 
-			tokens = nltk.tokenize.word_tokenize(sents[i])
 			rareno += self.rareCount(tokens)
 			
 			if (len(tokens) > 21):
@@ -88,9 +77,12 @@ class Comments:
 			sentno += 1
 			tagged = nltk.pos_tag(tokens)
 			adno += self.adCount(tagged)
-
+			
 			if self.endsWithPrep(tagged):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\": " + "ends with a preposition. Consider revising."])
+
+			if not self.tenseConsistency(tagged):
+				self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + " tense inconsistency detected."])
 
 			for j in range(len(tokens)):
 				if (self.regexp.search(tokens[j])) :
@@ -98,10 +90,7 @@ class Comments:
 				else :	
 					temp = self.misused(tagged[j])
 					if (temp):
-						charno = re.search(tagged[j][0], sents[i]).start()
-						size = len(tagged[j][0])
 						self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + temp])
-			chno += len(sents[i])
 
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
@@ -113,6 +102,7 @@ class Comments:
 	def message(self, word):
 		return "\'" + word + "\' might be more suitable in this sentence."
 
+	# Sidhi :: fix error
 	# Gives error for words containing words in the misused list.
 	# eg: exceptional, affection
 	# Must be corrected.
@@ -133,7 +123,8 @@ class Comments:
 			if(word.freq(token)<=5):
 				count+=1
 		return count
-				
+	
+	# Smriti :: fix bug in logic
 	def adCount(self, tagged):
 		mydict = dict(tagged)
 		pos2 = nltk.Index((value, key) for (key, value) in mydict.items())
@@ -150,8 +141,27 @@ class Comments:
 		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":
 			return True
 		return False
+
+	def tenseConsistency(self, tagged):
+		isPast = False
+		isPresent = False
+		quotes = False
+		for tag in tagged:
+			if tag[0] in ("''", "``"):
+				quotes = not quotes
+			if not quotes:
+				if tag[1] == "VBD":
+					if isPresent:
+						return False
+					else:
+						isPast = True
+				elif tag[1] in ("VBP", "VBZ"):
+					if isPast == True:
+						return False
+					else:
+						isPresent = True
+		return True
 	
-# Should think about exact format of data we return
 class Readability:
 	def __init__(self):
 		self.res = []
@@ -262,65 +272,3 @@ class Readability:
 def dec(decnum):
 	return "%.2f" %decnum
 
-	''' COMMENTED OUT!
-	# we no longer need the below functions. But let them be
-	# 	in case we require some of their functionality,
-	#	of for testing purposes.
-	def printLineNo(num):
-		print "(" + str(num) + ")",
-
-	def display(data):
-		print "\n"
-		x = len(data)/100 + 1
-		for i in xrange(x):
-			printLineNo(i+1)
-			print data[i*100:(i+1)*100]
-
-		print "\n\nComments"
-		for p in comments:
-			printLineNo(p[0])
-			print p[1]
-
-		print "\nReadability"
-		for r in res:
-			print r[0] + ": " + dec(r[1])
-
-		print "\nInfo"
-		for i in rep:
-			print i[0] + ": " + str(i[1])
-
-		print
-
-	def main():
-		f = open(sys.argv[1])
-		text = f.read()
-		readblty(text)
-
-		display(text)
-
-if __name__ == "__main__":
-	main()
-
-if __name__ == "__main__":
-	f = open(sys.argv[1])
-	text = f.read()
-	
-	#c = Comments()
-	#print c.getComments(text)
-
-	r = Readability()
-	print r.getReadability(text)
-	print r.getResultData()
-	
-if __name__ == "__main__":
-	f = open(sys.argv[1])
-	text = f.read()
-	
-	#c = Comments()
-	#print c.getComments(text)
-
-	r = Readability()
-	print r.getReadability(text)
-	print r.getResultData()
-
-	'''

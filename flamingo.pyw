@@ -1,6 +1,5 @@
 import sys
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import pyqtSlot,SIGNAL,SLOT
 import editor_window
 import ui_schoolEssay
 import ui_formalLetter
@@ -325,8 +324,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.setRead1)
 		readability.addAction(ag.addAction(self.actionRead5))
 		
-		ag.triggered.connect(self.setReadability)
-		#self.connect(ag, SIGNAL("triggered(QtGui.QAction *action)"), self.setReadability)	
+		ag.triggered.connect(self.setReadability)	
 		menu.addSeparator()
 
 		self.actionEvaluate = QtGui.QAction("Evaluate document",
@@ -349,7 +347,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 			triggered=self.autoRead)
 		menu.addAction(self.actionAutoRead) 
 
-	#@pyqtSlot(QtGui.QAction)
 	def setReadability(self, currentAction):
 		self.targetReadability = self.readabilities[str(currentAction.text())]
 
@@ -486,10 +483,8 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		if not self.clickSet:
 			self.ui.commentsListWidget.itemSelectionChanged.connect(self.itemSelectedSlot)
-			#self.connect(self.ui.commentsListWidget, SIGNAL("itemSelectionChanged()"), self, SLOT("itemSelectedSlot()"))
 			self.clickSet = True
 
-	#@pyqtSlot()
 	def itemSelectedSlot(self):
 		item = self.ui.commentsListWidget.currentItem()
 		row = self.ui.commentsListWidget.currentRow()
@@ -515,6 +510,13 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
+
+		self.ui.readabilityTextEdit.append("\n")
+
+		data = self.rc.getResultData()
+		for r in data:
+			self.ui.readabilityTextEdit.append(r[0] + ": " + str(r[1]))
+
 
 		avg = float(rd[len(rd) - 1][1])
 		if self.targetReadability and (avg > self.targetReadability[1] or avg < self.targetReadability[0]):

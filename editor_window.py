@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Mon Apr  7 09:08:25 2014
+# Created: Mon Apr 14 12:27:46 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -49,12 +49,6 @@ class Ui_MainWindow(object):
         self.commentsListWidget.setProperty("isWrapping", False)
         self.commentsListWidget.setWordWrap(True)
         self.commentsListWidget.setObjectName(_fromUtf8("commentsListWidget"))
-        item = QtGui.QListWidgetItem()
-        self.commentsListWidget.addItem(item)
-        item = QtGui.QListWidgetItem()
-        self.commentsListWidget.addItem(item)
-        item = QtGui.QListWidgetItem()
-        self.commentsListWidget.addItem(item)
         self.editorTextEdit = QtGui.QTextEdit(self.centralwidget)
         self.editorTextEdit.setGeometry(QtCore.QRect(10, 20, 521, 501))
         self.editorTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -90,15 +84,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-        __sortingEnabled = self.commentsListWidget.isSortingEnabled()
-        self.commentsListWidget.setSortingEnabled(False)
-        item = self.commentsListWidget.item(0)
-        item.setText(_translate("MainWindow", "Comment 1", None))
-        item = self.commentsListWidget.item(1)
-        item.setText(_translate("MainWindow", "Comment 2", None))
-        item = self.commentsListWidget.item(2)
-        item.setText(_translate("MainWindow", "Comment 3", None))
-        self.commentsListWidget.setSortingEnabled(__sortingEnabled)
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuTools.setTitle(_translate("MainWindow", "Tools", None))
