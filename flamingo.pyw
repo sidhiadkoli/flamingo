@@ -18,15 +18,36 @@ class SchoolDialog(QtGui.QDialog):
 		pass
 
 	def getCombinedText(self):
-		text = str(self.ui.titleTextEdit.toPlainText()).strip()
-		text += "\n\n"
-		text += str(self.ui.introTextEdit.toPlainText()).strip()
-		text += "\n\n"
-		text += str(self.ui.point1TextEdit.toPlainText()).strip()
-		text += "\n\n"
-		text += str(self.ui.point2TextEdit.toPlainText()).strip()
-		text += "\n\n"
-		text += str(self.ui.point3TextEdit.toPlainText()).strip()
+		text = ""
+		texttemp = str(self.ui.titleTextEdit.toPlainText()).strip()
+		text = "Title :: "
+		if(texttemp ==""):
+			texttemp = "Type the Title  here"
+		text += texttemp
+		
+		texttemp = str(self.ui.introTextEdit.toPlainText()).strip()
+		if(texttemp ==""):
+			texttemp = "Type Introduction here"
+		text += "\n\n"+texttemp
+		
+		texttemp = str(self.ui.point1TextEdit.toPlainText()).strip()
+		if(texttemp ==""):
+			texttemp = "Type point considered for 1st Paragraph here"
+		text += "\n\n"+texttemp
+		text += "Expand here"
+		
+		texttemp = str(self.ui.point2TextEdit.toPlainText()).strip()
+		if(texttemp ==""):
+			texttemp = "Type point considered for 2nd Paragraph here"
+		text += "\n\n"+texttemp
+		text += "Expand here"
+		
+		texttemp = str(self.ui.point3TextEdit.toPlainText()).strip()
+		if(texttemp ==""):
+			texttemp = "Type point considered for 3rd Paragraph here"
+		text += "\n\n"+texttemp
+		text += "Expand here"
+		
 		text += "\n\nType conclusion here."
 
 		return text
