@@ -516,6 +516,13 @@ class EditorMainWindow(QtGui.QMainWindow):
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
+		self.ui.readabilityTextEdit.append("\n")
+
+		data = self.rc.getResultData()
+		for r in data:
+			self.ui.readabilityTextEdit.append(r[0] + ": " + str(r[1]))
+
+
 		avg = float(rd[len(rd) - 1][1])
 		if self.targetReadability and (avg > self.targetReadability[1] or avg < self.targetReadability[0]):
 			self.ui.readabilityTextEdit.setTextBackgroundColor(self.colour[1])

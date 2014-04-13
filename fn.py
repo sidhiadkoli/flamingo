@@ -55,23 +55,15 @@ class Comments:
 
 	# There is redundancy here. We do not need to calculate statistics
 	#	(Cleaned up class. Further clean up is possible)	
-	# Must change the first item in comments to a suitable format.
-	#	It currently calculates line number.
 	def getComments(self, data) :
-		## variables
-		chno = 0
 		sentno = 0
 		adno = 0
-		##
+		
 		self.comments = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
 
-		#smriti :: sentence number appended instead of line number. Character number and size of text to be highlighted left
-		# Sidhi :: Changed to entire sentence
 		for i in range(len(sents)):
-			charno = 0
-
 			if self.passive.is_passive(sents[i]):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
 
@@ -82,9 +74,12 @@ class Comments:
 			sentno += 1
 			tagged = nltk.pos_tag(tokens)
 			adno += self.adCount(tagged)
-
+			
 			if self.endsWithPrep(tagged):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\": " + "ends with a preposition. Consider revising."])
+
+			if not self.tenseConsistency(tagged):
+				self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + " tense inconsistency detected."])
 
 			for j in range(len(tokens)):
 				if (self.regexp.search(tokens[j])) :
@@ -92,10 +87,7 @@ class Comments:
 				else :	
 					temp = self.misused(tagged[j])
 					if (temp):
-						charno = re.search(tagged[j][0], sents[i]).start()
-						size = len(tagged[j][0])
 						self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + temp])
-			chno += len(sents[i])
 
 		# I have currently put floweriness along with the comments
 		# will have to reorg later
@@ -131,6 +123,26 @@ class Comments:
 		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":
 			return True
 		return False
+
+	def tenseConsistency(self, tagged):
+		isPast = False
+		isPresent = False
+		quotes = False
+		for tag in tagged:
+			if tag[0] in ("''", "``"):
+				quotes = not quotes
+			if not quotes:
+				if tag[1] == "VBD":
+					if isPresent:
+						return False
+					else:
+						isPast = True
+				elif tag[1] in ("VBP", "VBZ"):
+					if isPast == True:
+						return False
+					else:
+						isPresent = True
+		return True
 	
 # Should think about exact format of data we return
 class Readability:
