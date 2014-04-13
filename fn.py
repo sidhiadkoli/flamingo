@@ -1,5 +1,4 @@
 import nltk
-#import sys
 import re
 import postagger
 import curses.ascii
@@ -7,7 +6,6 @@ from nltk.corpus import cmudict
 from itertools import dropwhile
 
 class IsPassive:
-
 	def __init__(self):
 		self.TAGGER = postagger.get_tagger()
 
@@ -38,14 +36,13 @@ class IsPassive:
 
 		return self.passivep(tags)
 
-# Do we really need regexp? Consider.
 class Comments:
 	def __init__(self):
 		self.comments = []
 		self.passive = IsPassive()
 		self.regexp = re.compile('\A[^a-zA-Z]')
 		
-		# must add more words
+		# Smriti :: add more words
 		self.misused_list = [("accept", "VB", "except"),
 			("except", "NN", "accept"),
 			("than", "IN", "then"),
@@ -53,7 +50,6 @@ class Comments:
 			("affect", "VB", "effect"),
 			("effect", "NN", "affect")]
 
-	# There is redundancy here. We do not need to calculate statistics
 	#	(Cleaned up class. Further clean up is possible)	
 	def getComments(self, data) :
 		sentno = 0
@@ -98,6 +94,7 @@ class Comments:
 	def message(self, word):
 		return "\'" + word + "\' might be more suitable in this sentence."
 
+	# Sidhi :: fix error
 	# Gives error for words containing words in the misused list.
 	# eg: exceptional, affection
 	# Must be corrected.
@@ -107,6 +104,7 @@ class Comments:
 				return self.message(p[2])
 		return None
 
+	# Smriti :: fix bug in logic
 	def adCount(self, tagged):
 		mydict = dict(tagged)
 		pos2 = nltk.Index((value, key) for (key, value) in mydict.items())
@@ -144,7 +142,6 @@ class Comments:
 						isPresent = True
 		return True
 	
-# Should think about exact format of data we return
 class Readability:
 	def __init__(self):
 		self.res = []
@@ -255,65 +252,3 @@ class Readability:
 def dec(decnum):
 	return "%.2f" %decnum
 
-	''' COMMENTED OUT!
-	# we no longer need the below functions. But let them be
-	# 	in case we require some of their functionality,
-	#	of for testing purposes.
-	def printLineNo(num):
-		print "(" + str(num) + ")",
-
-	def display(data):
-		print "\n"
-		x = len(data)/100 + 1
-		for i in xrange(x):
-			printLineNo(i+1)
-			print data[i*100:(i+1)*100]
-
-		print "\n\nComments"
-		for p in comments:
-			printLineNo(p[0])
-			print p[1]
-
-		print "\nReadability"
-		for r in res:
-			print r[0] + ": " + dec(r[1])
-
-		print "\nInfo"
-		for i in rep:
-			print i[0] + ": " + str(i[1])
-
-		print
-
-	def main():
-		f = open(sys.argv[1])
-		text = f.read()
-		readblty(text)
-
-		display(text)
-
-if __name__ == "__main__":
-	main()
-
-if __name__ == "__main__":
-	f = open(sys.argv[1])
-	text = f.read()
-	
-	#c = Comments()
-	#print c.getComments(text)
-
-	r = Readability()
-	print r.getReadability(text)
-	print r.getResultData()
-	
-if __name__ == "__main__":
-	f = open(sys.argv[1])
-	text = f.read()
-	
-	#c = Comments()
-	#print c.getComments(text)
-
-	r = Readability()
-	print r.getReadability(text)
-	print r.getResultData()
-
-	'''
