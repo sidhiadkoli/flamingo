@@ -9,11 +9,10 @@ class IsPassive:
 	def __init__(self):
 		self.TAGGER = postagger.get_tagger()
 
-	def tag_sentence(self, sent):
-		"""Take a sentence as a string and return 
+	def tag_tokens(self, tokens):
+		"""Take tokens and return 
 			a list of (word, tag) tuples."""
 
-		tokens = nltk.word_tokenize(sent)
 		return self.TAGGER.tag(tokens)
 
 	def passivep(self, tags):
@@ -21,17 +20,18 @@ class IsPassive:
 			we think this is a passive sentence."""
 		
 		postToBe = list(dropwhile(lambda(tag): not tag.startswith("BE"), tags))
-		nongerund = lambda(tag): tag.startswith("V") and not tag.startswith("VBG")
+
+		nongerund = lambda(tag): tag.startswith("V") and not (tag.startswith("VBG") or tag == "VB")
 
 		filtered = filter(nongerund, postToBe)
 		out = any(filtered)
 
 		return out
 
-	def is_passive(self, sent):
-		"""Given a sentence, tag it and print if we think 
+	def is_passive(self, tokens):
+		"""Given tokens, tag it and print if we think 
 		it's a passive-voice formation."""
-		tagged = self.tag_sentence(sent)
+		tagged = self.tag_tokens(tokens)
 		tags = map( lambda(tup): tup[1], tagged)
 
 		return self.passivep(tags)
@@ -60,10 +60,11 @@ class Comments:
 		sents = nltk.tokenize.sent_tokenize(data)
 
 		for i in range(len(sents)):
-			if self.passive.is_passive(sents[i]):
+			tokens = nltk.tokenize.word_tokenize(sents[i])
+
+			if self.passive.is_passive(tokens):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
 
-			tokens = nltk.tokenize.word_tokenize(sents[i])
 			if (len(tokens) > 21):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
