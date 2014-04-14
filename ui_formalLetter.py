@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'FormalLetter.ui'
 #
-# Created: Sun Mar 23 14:55:39 2014
+# Created: Mon Apr 14 12:37:56 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -44,6 +44,7 @@ class Ui_Dialog(object):
         self.line_6.setObjectName(_fromUtf8("line_6"))
         self.sendAddr2LineEdit = QtGui.QLineEdit(Dialog)
         self.sendAddr2LineEdit.setGeometry(QtCore.QRect(270, 50, 331, 21))
+        self.sendAddr2LineEdit.setText(_fromUtf8(""))
         self.sendAddr2LineEdit.setObjectName(_fromUtf8("sendAddr2LineEdit"))
         self.sendNameLineEdit = QtGui.QLineEdit(Dialog)
         self.sendNameLineEdit.setGeometry(QtCore.QRect(270, 450, 331, 21))
@@ -86,6 +87,7 @@ class Ui_Dialog(object):
         self.line_2.setObjectName(_fromUtf8("line_2"))
         self.sendAddr1LineEdit = QtGui.QLineEdit(Dialog)
         self.sendAddr1LineEdit.setGeometry(QtCore.QRect(270, 20, 331, 21))
+        self.sendAddr1LineEdit.setText(_fromUtf8(""))
         self.sendAddr1LineEdit.setObjectName(_fromUtf8("sendAddr1LineEdit"))
         self.line_3 = QtGui.QFrame(Dialog)
         self.line_3.setGeometry(QtCore.QRect(-10, 270, 651, 16))
@@ -144,10 +146,8 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Formal Letter", None))
-        self.sendAddr2LineEdit.setText(_translate("Dialog", "Line 2", None))
         self.label_4.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600;\">Receiver\'s Address</span></p></body></html>", None))
         self.label_8.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600;\">Content</span></p></body></html>", None))
-        self.sendAddr1LineEdit.setText(_translate("Dialog", "Line 1", None))
         self.label_6.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600;\">Subject</span></p></body></html>", None))
         self.label_5.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600;\">Date</span></p></body></html>", None))
         self.label_3.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-weight:600;\">Sender\'s Address</span></p></body></html>", None))
