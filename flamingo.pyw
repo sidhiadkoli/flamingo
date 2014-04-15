@@ -187,26 +187,36 @@ class EditorMainWindow(QtGui.QMainWindow):
 
 		self.ui = editor_window.Ui_MainWindow()
 		self.ui.setupUi(self)
-		self.readabilities = {"None": None,"Children (<=12)":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}
-		
-		self.fileName = ""
-		self.evaluator = fn.Comments()		
-		self.rc = fn.Readability()
-		self.clickSet = False
-		self.targetReadability = self.readabilities["None"]
-		self.textEdit = self.ui.editorTextEdit
 
+		self.initVar()
 		self.initUiElements()
 		self.setupFileActions()
 		self.setupEditActions()
 		self.setupEditorProperties()
 		self.setupToolActions()
 
+	def initVar(self):
+		self.readabilities = {"None": None,"Children (<=12)":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}		
+		self.fileName = ""
+		self.comments = []
+		self.floweriness = []
+		self.mapping = []
+		self.evaluator = fn.Comments()		
+		self.rc = fn.Readability()
+		self.clickSet = False
+		self.targetReadability = self.readabilities["None"]
+		self.textEdit = self.ui.editorTextEdit
+		self.ctrb = [self.ui.lowrb, self.ui.highrb, self.ui.bothrb]
+		self.commentType = (0, 1)
+
 	def initUiElements(self):
 		self.textEdit.setFocus()
 		self.setFileName("")
 		self.clearAll()
 		self.colour = [QtGui.QColor(204, 229, 255), QtGui.QColor(255, 204, 204), QtGui.QColor(255, 255, 255)]
+
+		for rb in self.ctrb:
+			rb.clicked.connect(self.updateCommentType)
 
 		self.textEdit.cursorPositionChanged.connect(self.updateCursorPosition)
 
@@ -387,6 +397,14 @@ class EditorMainWindow(QtGui.QMainWindow):
 				+ str(col))
 		self.statusBar().showMessage(status)
 
+	def updateCommentType(self):
+		self.commentType = (0, 1)
+		for i in range(2):
+			if self.ctrb[i].isChecked():
+				self.commentType = (i,) 
+
+		self.dispComments()
+
 	def checkSave(self):
 		if not self.textEdit.document().isModified():
 			return True
@@ -499,26 +517,39 @@ class EditorMainWindow(QtGui.QMainWindow):
 		pass
 
 	def evaluate(self):
-		self.ui.commentsListWidget.clear()
 		if str(self.textEdit.toPlainText()) == "":
 			return 0
 		
-		self.comments = self.evaluator.getComments(str(self.textEdit.toPlainText()))
+		self.comments, self.floweriness = self.evaluator.getComments(str(self.textEdit.toPlainText()))
 
-		for c in self.comments:
-			self.ui.commentsListWidget.addItem(c[2])
-
-		for i in range(self.ui.commentsListWidget.count()):
-			self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[i][1]])
+		self.dispComments()
+		self.dispFloweriness()
 
 		if not self.clickSet:
 			self.ui.commentsListWidget.itemSelectionChanged.connect(self.itemSelectedSlot)
 			self.clickSet = True
 
+	def dispComments(self):
+		self.ui.commentsListWidget.clear()
+
+		for c in range(len(self.comments)):
+			if self.comments[c][1] in self.commentType:
+				self.ui.commentsListWidget.addItem(self.comments[c][2])
+				i = self.ui.commentsListWidget.count() - 1
+				self.mapping.insert(i, c)
+				self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[c][1]])
+
+
+	def dispFloweriness(self):
+		self.ui.flowerTextEdit.clear()
+
+		for f in self.floweriness:
+			self.ui.flowerTextEdit.append(f)
+
 	def itemSelectedSlot(self):
 		item = self.ui.commentsListWidget.currentItem()
 		row = self.ui.commentsListWidget.currentRow()
-		com = self.comments[row][0]
+		com = self.comments[self.mapping[row]][0]
 		cu = self.textEdit.textCursor()
 		pos = str(self.textEdit.toPlainText()).find(com)
 		
@@ -541,7 +572,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
-		self.ui.readabilityTextEdit.append("\n")
+		self.ui.readabilityTextEdit.append("")
 
 		data = self.rc.getResultData()
 		for r in data:
@@ -569,6 +600,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.textEdit.clear()
 		self.ui.readabilityTextEdit.clear()
 		self.ui.commentsListWidget.clear()
+		self.ui.flowerTextEdit.clear()
 
 
 if __name__ == '__main__':
