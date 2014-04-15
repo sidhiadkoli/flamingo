@@ -53,7 +53,32 @@ class Comments:
 			("than", "IN", "then"),
 			("then", "RB", "than"),
 			("affect", "VB", "effect"),
-			("effect", "NN", "affect")]
+			("effect", "NN", "affect"),
+			("elicit", "VB", "illicit"),
+			("illicit", "JJ", "elicit")]
+			
+		'''http://www.quora.com/India/What-are-some-English-words-phrases-colloquial-or-not-overused-or-even-misused-in-India
+			http://www.policymic.com/articles/31309/10-most-commonly-misused-words
+			http://www.rediff.com/getahead/slide-show/slide-show-1-career-top-english-mistakes-desi-make/20110719.htm
+		'''
+		self.misused_indian = [("you gets", "you get"),
+			("please do the needful","Please do what's necessary"),
+			("pluck flowers", "pick flowers"),
+			("yesterday evening", "last evening"),
+			("yesterday night", "last night"),
+			("updation", "update"),
+			("please to", "please"),
+			("cousin brother", "cousin"),
+			("cousin sister", "cousin"),
+			("prepone", "advance"),
+			("anyways", "anyway"),
+			("more better", "better"),
+			("much more", "much"),
+			("by the by", "by the way"),
+			("listening music", "listening to music"),
+			("repeat again", "repeat"),
+			("return back", "return"),
+			("good name", "name")]
 
 	def initFreqData(self):
 		self.words = FreqDist()
@@ -68,11 +93,16 @@ class Comments:
 		rareno = 0
 		
 		self.comments = []
-
+		
+			
 		sents = nltk.tokenize.sent_tokenize(data)
 
 		for i in range(len(sents)):
 			tokens = nltk.tokenize.word_tokenize(sents[i])
+			
+			for p in self.misused_indian:
+			if(sents[i].find(p[0])!=-1):
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + self.msg(p[1]))
 
 			if self.passive.is_passive(tokens):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
