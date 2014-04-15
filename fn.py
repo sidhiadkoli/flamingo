@@ -67,9 +67,8 @@ class Comments:
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 			
 			for p in self.misused_indian:
-                                if(sents[i].find(p[0])!=-1):
-                                        print p[0]
-                                        self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" You should use " + self.message(p[1])])
+                if(sents[i].find(p[0])!=-1):
+                    self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
 
 			rareno += self.rareCount(tokens)
 			
