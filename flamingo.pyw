@@ -157,17 +157,26 @@ class DebateDialog(QtGui.QDialog):
 		text += temptext	
 		text += "\n\n"
 		temptext = str(self.ui.arg1TextEdit.toPlainText()).strip()
-		if(temptext != ""):
-			text += temptext
-			text += "\n\n"
+		if(temptext == ""):
+			temptext = "Enter 1st Arguement Here."
+		text += temptext
+		text +=" Justify Here."
+		text += "\n\n"
 		temptext = str(self.ui.arg2TextEdit.toPlainText()).strip()
-		if(temptext != ""):
-			text += temptext
-			text += "\n\n"
+		
+		if(temptext == ""):
+			temptext = "Enter 2nd Arguement Here."
+		text += temptext
+		text +=" Justify Here."
+		text += "\n\n"
+		
 		temptext = str(self.ui.arg3TextEdit.toPlainText()).strip()
-		if(temptext != ""):
-			text += temptext
-			text += "\n\n"
+		if(temptext == ""):
+			temptext = "Enter 1st Arguement Here."
+		text += temptext
+		text +=" Justify Here."
+		text += "\n\n"
+		
 		text += "Type conclusion here."
 
 		return text
