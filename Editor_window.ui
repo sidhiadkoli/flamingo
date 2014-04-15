@@ -133,14 +133,17 @@
      </property>
     </widget>
    </widget>
-   <widget class="QListWidget" name="flowerList">
+   <widget class="QTextEdit" name="flowerTextEdit">
     <property name="geometry">
      <rect>
-      <x>540</x>
+      <x>640</x>
       <y>320</y>
-      <width>331</width>
+      <width>131</width>
       <height>51</height>
      </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>

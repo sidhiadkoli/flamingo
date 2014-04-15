@@ -199,6 +199,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.readabilities = {"None": None,"Children (<=12)":[0,7],"Adolescence":[7,12],"Undergraduate":[12, 16],"Graduate":[15,18],"PhD":[18,24]}		
 		self.fileName = ""
 		self.comments = []
+		self.floweriness = []
 		self.mapping = []
 		self.evaluator = fn.Comments()		
 		self.rc = fn.Readability()
@@ -206,7 +207,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.targetReadability = self.readabilities["None"]
 		self.textEdit = self.ui.editorTextEdit
 		self.ctrb = [self.ui.lowrb, self.ui.highrb, self.ui.bothrb]
-		self.commentType = (0, 1, 2)
+		self.commentType = (0, 1)
 
 	def initUiElements(self):
 		self.textEdit.setFocus()
@@ -397,10 +398,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.statusBar().showMessage(status)
 
 	def updateCommentType(self):
-		self.commentType = (0, 1, 2)
+		self.commentType = (0, 1)
 		for i in range(2):
 			if self.ctrb[i].isChecked():
-				self.commentType = (i,2) 
+				self.commentType = (i,) 
 
 		self.dispComments()
 
@@ -519,9 +520,10 @@ class EditorMainWindow(QtGui.QMainWindow):
 		if str(self.textEdit.toPlainText()) == "":
 			return 0
 		
-		self.comments = self.evaluator.getComments(str(self.textEdit.toPlainText()))
+		self.comments, self.floweriness = self.evaluator.getComments(str(self.textEdit.toPlainText()))
 
 		self.dispComments()
+		self.dispFloweriness()
 
 		if not self.clickSet:
 			self.ui.commentsListWidget.itemSelectionChanged.connect(self.itemSelectedSlot)
@@ -537,10 +539,12 @@ class EditorMainWindow(QtGui.QMainWindow):
 				self.mapping.insert(i, c)
 				self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[c][1]])
 
-		'''
-		for i in range(self.ui.commentsListWidget.count()):
-			self.ui.commentsListWidget.item(i).setBackground(self.colour[self.comments[i][1]])
-		'''
+
+	def dispFloweriness(self):
+		self.ui.flowerTextEdit.clear()
+
+		for f in self.floweriness:
+			self.ui.flowerTextEdit.append(f)
 
 	def itemSelectedSlot(self):
 		item = self.ui.commentsListWidget.currentItem()
@@ -568,7 +572,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		for s in rd:
 			self.ui.readabilityTextEdit.append(s[0] + ": " + str(s[1]))
 
-		self.ui.readabilityTextEdit.append("\n")
+		self.ui.readabilityTextEdit.append("")
 
 		data = self.rc.getResultData()
 		for r in data:
@@ -596,6 +600,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.textEdit.clear()
 		self.ui.readabilityTextEdit.clear()
 		self.ui.commentsListWidget.clear()
+		self.ui.flowerTextEdit.clear()
 
 
 if __name__ == '__main__':

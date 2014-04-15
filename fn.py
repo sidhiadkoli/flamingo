@@ -34,6 +34,7 @@ class Comments:
 		rareno = 0
 		
 		self.comments = []
+		self.floweriness = []
 
 		sents = nltk.tokenize.sent_tokenize(data)
 
@@ -67,13 +68,12 @@ class Comments:
 					if (temp):
 						self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + temp])
 
-		# I have currently put floweriness along with the comments
-		# will have to reorg later
-		self.comments.append(["", 2, "Number of Adjectives per Sentence: " + dec(adno*1.0/sentno)])
+		# Floweriness and obscurity
+		self.floweriness.append("Floweriness: " + dec(adno*1.0/sentno))
 
-		self.comments.append(["", 2, "Number of Rare/Difficult words per Sentence: " + dec(rareno*1.0/sentno)])
+		self.floweriness.append("Obscurity: " + dec(rareno*1.0/sentno))
 
-		return self.comments
+		return (self.comments, self.floweriness)
 
 	def message(self, word):
 		return "\'" + word + "\' might be more suitable in this sentence."

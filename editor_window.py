@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Mon Apr 14 20:44:17 2014
+# Created: Tue Apr 15 19:13:51 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,7 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(882, 571)
+        MainWindow.resize(880, 674)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.line = QtGui.QFrame(self.centralwidget)
@@ -34,28 +34,18 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtGui.QFrame.HLine)
         self.line.setFrameShadow(QtGui.QFrame.Sunken)
         self.line.setObjectName(_fromUtf8("line"))
-        self.line_2 = QtGui.QFrame(self.centralwidget)
-        self.line_2.setGeometry(QtCore.QRect(0, 520, 891, 16))
-        self.line_2.setFrameShape(QtGui.QFrame.HLine)
-        self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_2.setObjectName(_fromUtf8("line_2"))
-        self.line_4 = QtGui.QFrame(self.centralwidget)
-        self.line_4.setGeometry(QtCore.QRect(530, 10, 20, 521))
-        self.line_4.setFrameShape(QtGui.QFrame.VLine)
-        self.line_4.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_4.setObjectName(_fromUtf8("line_4"))
         self.commentsListWidget = QtGui.QListWidget(self.centralwidget)
-        self.commentsListWidget.setGeometry(QtCore.QRect(550, 30, 321, 281))
+        self.commentsListWidget.setGeometry(QtCore.QRect(540, 30, 331, 281))
         self.commentsListWidget.setProperty("isWrapping", False)
         self.commentsListWidget.setWordWrap(True)
         self.commentsListWidget.setObjectName(_fromUtf8("commentsListWidget"))
         self.editorTextEdit = QtGui.QTextEdit(self.centralwidget)
-        self.editorTextEdit.setGeometry(QtCore.QRect(10, 20, 521, 501))
+        self.editorTextEdit.setGeometry(QtCore.QRect(10, 20, 521, 611))
         self.editorTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.editorTextEdit.setReadOnly(False)
         self.editorTextEdit.setObjectName(_fromUtf8("editorTextEdit"))
         self.readabilityTextEdit = QtGui.QTextEdit(self.centralwidget)
-        self.readabilityTextEdit.setGeometry(QtCore.QRect(550, 320, 321, 191))
+        self.readabilityTextEdit.setGeometry(QtCore.QRect(540, 380, 331, 251))
         self.readabilityTextEdit.setReadOnly(True)
         self.readabilityTextEdit.setObjectName(_fromUtf8("readabilityTextEdit"))
         self.groupBox = QtGui.QGroupBox(self.centralwidget)
@@ -74,9 +64,13 @@ class Ui_MainWindow(object):
         self.bothrb.setGeometry(QtCore.QRect(220, 10, 102, 20))
         self.bothrb.setChecked(True)
         self.bothrb.setObjectName(_fromUtf8("bothrb"))
+        self.flowerTextEdit = QtGui.QTextEdit(self.centralwidget)
+        self.flowerTextEdit.setGeometry(QtCore.QRect(640, 320, 131, 51))
+        self.flowerTextEdit.setReadOnly(True)
+        self.flowerTextEdit.setObjectName(_fromUtf8("flowerTextEdit"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 882, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 22))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
