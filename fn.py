@@ -1,48 +1,14 @@
 import nltk
 import re
-import postagger
 import curses.ascii
 from nltk.corpus import cmudict
 from nltk.corpus import brown
 from nltk.probability import *
-from itertools import dropwhile
 
-
-class IsPassive:
-	def __init__(self):
-		self.TAGGER = postagger.get_tagger()
-
-	def tag_tokens(self, tokens):
-		"""Take tokens and return 
-			a list of (word, tag) tuples."""
-
-		return self.TAGGER.tag(tokens)
-
-	def passivep(self, tags):
-		"""Takes a list of tags, returns true if 
-			we think this is a passive sentence."""
-		
-		postToBe = list(dropwhile(lambda(tag): not tag.startswith("BE"), tags))
-
-		nongerund = lambda(tag): tag.startswith("V") and not (tag.startswith("VBG") or tag == "VB")
-
-		filtered = filter(nongerund, postToBe)
-		out = any(filtered)
-
-		return out
-
-	def is_passive(self, tokens):
-		"""Given tokens, tag it and print if we think 
-		it's a passive-voice formation."""
-		tagged = self.tag_tokens(tokens)
-		tags = map( lambda(tup): tup[1], tagged)
-
-		return self.passivep(tags)
 
 class Comments:
 	def __init__(self):
 		self.comments = []
-		self.passive = IsPassive()
 		self.regexp = re.compile('\A[^a-zA-Z]')
 		
 		self.initFreqData()
@@ -74,9 +40,6 @@ class Comments:
 		for i in range(len(sents)):
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 
-			if self.passive.is_passive(tokens):
-				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."]) 
-
 			rareno += self.rareCount(tokens)
 			
 			if (len(tokens) > 21):
@@ -84,6 +47,10 @@ class Comments:
 
 			sentno += 1
 			tagged = nltk.pos_tag(tokens)
+
+			if self.is_passive(tagged):
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."])
+
 			adno += self.adCount(tagged)
 			
 			if self.endsWithPrep(tagged):
@@ -137,6 +104,26 @@ class Comments:
 			if (i[1] == 'RB' or i[1] == 'RBR' or i[1] == 'RBS'):
 				adv += 1
 		return adj + adv
+
+	def is_passive(self, tags):
+		passive = False
+		state = ""
+		i = 0
+		while (i < len(tags) and passive == False):
+			if tags[i][0] in ("is", "am", "was", "were", "are", "be"):
+				state = "BE"
+			elif tags[i][0] in ("has", "have", "had"):
+				state = "H"
+			elif state == "BE" and tags[i][0] == "being":
+				pass
+			elif state == "BE" and tags[i][1] in ("VBN", "VBD"):
+				passive = True
+			elif state == "H" and tags[i][0] == "been":
+				state = "BE"
+			else:
+				state = ""
+			i += 1
+		return passive
 
 	def endsWithPrep(self, tagged):
 		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":

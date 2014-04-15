@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Mon Apr 14 12:27:46 2014
+# Created: Mon Apr 14 20:44:17 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.line_4.setFrameShadow(QtGui.QFrame.Sunken)
         self.line_4.setObjectName(_fromUtf8("line_4"))
         self.commentsListWidget = QtGui.QListWidget(self.centralwidget)
-        self.commentsListWidget.setGeometry(QtCore.QRect(550, 20, 321, 291))
+        self.commentsListWidget.setGeometry(QtCore.QRect(550, 30, 321, 281))
         self.commentsListWidget.setProperty("isWrapping", False)
         self.commentsListWidget.setWordWrap(True)
         self.commentsListWidget.setObjectName(_fromUtf8("commentsListWidget"))
@@ -58,6 +58,22 @@ class Ui_MainWindow(object):
         self.readabilityTextEdit.setGeometry(QtCore.QRect(550, 320, 321, 191))
         self.readabilityTextEdit.setReadOnly(True)
         self.readabilityTextEdit.setObjectName(_fromUtf8("readabilityTextEdit"))
+        self.groupBox = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox.setGeometry(QtCore.QRect(550, 0, 331, 31))
+        self.groupBox.setTitle(_fromUtf8(""))
+        self.groupBox.setFlat(True)
+        self.groupBox.setObjectName(_fromUtf8("groupBox"))
+        self.lowrb = QtGui.QRadioButton(self.groupBox)
+        self.lowrb.setGeometry(QtCore.QRect(10, 10, 102, 20))
+        self.lowrb.setObjectName(_fromUtf8("lowrb"))
+        self.highrb = QtGui.QRadioButton(self.groupBox)
+        self.highrb.setGeometry(QtCore.QRect(110, 10, 102, 20))
+        self.highrb.setChecked(False)
+        self.highrb.setObjectName(_fromUtf8("highrb"))
+        self.bothrb = QtGui.QRadioButton(self.groupBox)
+        self.bothrb.setGeometry(QtCore.QRect(220, 10, 102, 20))
+        self.bothrb.setChecked(True)
+        self.bothrb.setObjectName(_fromUtf8("bothrb"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 882, 22))
@@ -84,6 +100,9 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.lowrb.setText(_translate("MainWindow", "Blue", None))
+        self.highrb.setText(_translate("MainWindow", "Red", None))
+        self.bothrb.setText(_translate("MainWindow", "Both", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit", None))
         self.menuTools.setTitle(_translate("MainWindow", "Tools", None))

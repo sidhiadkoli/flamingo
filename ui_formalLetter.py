@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'FormalLetter.ui'
 #
-# Created: Mon Apr 14 12:37:56 2014
+# Created: Mon Apr 14 20:40:35 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
