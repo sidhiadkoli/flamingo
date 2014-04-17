@@ -67,12 +67,12 @@ class Comments:
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 			
 			for p in self.misused_indian:
-                if(sents[i].find(p[0])!=-1):
-                    self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
+                		if(sents[i].find(p[0])!=-1):
+					self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
 
 			rareno += self.rareCount(tokens)
 			
-			if (len(tokens) > 21):
+			if (len(tokens) > 25):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
 			sentno += 1
@@ -113,7 +113,7 @@ class Comments:
 	# Must be corrected.
 	def misused(self, token):
 		for p in self.misused_list:
-			if (token[0][:len(p[0])].lower() == p[0] and token[1][:2] != p[1] ):
+			if (token[0].lower() == p[0] and token[1][:2] != p[1] ):
 				return self.message(p[2])
 		return None
 		
