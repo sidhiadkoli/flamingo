@@ -74,16 +74,17 @@ class Comments:
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 			
 			for p in self.misusedIndian:
-                		if(sents[i].find(p[0])!=-1):
+                		if(sents[i].lower().find(p[0])!=-1):
 					self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
 
 			rareno += self.rareCount(tokens)
 			
-			if (len(tokens) > 25):
-				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
-
 			sentno += 1
 			tagged = nltk.pos_tag(tokens)
+
+			tagWords = list(t for t in tagged if curses.ascii.isalpha(t[1][0]))
+			if len(tagWords) > 21:
+				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" may be too long."])
 
 			if self.is_passive(tagged):
 				self.comments.append([sents[i], 0, "\"" + sents[i][:20] + "...\" might be in passive voice."])
@@ -96,17 +97,14 @@ class Comments:
 			if not self.tenseConsistency(tagged):
 				self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + " tense inconsistency detected."])
 
-			for j in range(len(tokens)):
-				if (self.regexp.search(tokens[j])) :
-					pass
-				else :	
-					temp = self.misused(tagged[j])
+			for j in range(len(tagWords)):
+				if curses.ascii.isalpha(tagWords[j][1][0]):
+					temp = self.misused(tagWords[j])
 					if (temp):
 						self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\": " + temp])
 
 		# Floweriness and obscurity
 		self.floweriness.append("Floweriness: " + dec(adno*1.0/sentno))
-
 		self.floweriness.append("Obscurity: " + dec(rareno*1.0/sentno))
 
 		return (self.comments, self.floweriness)
