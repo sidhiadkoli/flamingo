@@ -9,7 +9,6 @@ from nltk.probability import *
 class Comments:
 	def __init__(self):
 		self.comments = []
-		self.regexp = re.compile('\A[^a-zA-Z]')
 		self.sentTokenizer = nltk.tokenize.punkt.PunktSentenceTokenizer()		
 
 		self.initFreqData()
@@ -69,6 +68,7 @@ class Comments:
 		sents = []
 		for para in data.split('\n'):
 			sents.extend(self.sentTokenizer.tokenize(para, realign_boundaries=True))
+		sentno = len(sents)
 		
 		for i in range(len(sents)):
 			tokens = nltk.tokenize.word_tokenize(sents[i])
@@ -79,7 +79,6 @@ class Comments:
 
 			rareno += self.rareCount(tokens)
 			
-			sentno += 1
 			tagged = nltk.pos_tag(tokens)
 
 			tagWords = list(t for t in tagged if curses.ascii.isalpha(t[1][0]))
@@ -197,7 +196,7 @@ class Readability:
 		self.rep.append(["Number of words", 0])
 		self.rep.append(["Number of sentences", 0])
 
-		self.regexp = re.compile('\A[^a-zA-Z]')
+		self.sentTokenizer = nltk.tokenize.punkt.PunktSentenceTokenizer()		
 		self.di = cmudict.dict() 
 
 	def clearAll(self):
@@ -210,16 +209,16 @@ class Readability:
 
 	def getStats(self, data):
 		self.clearAll()
-		sents = nltk.tokenize.sent_tokenize(data)
+		sents = []
+		for para in data.split('\n'):
+			sents.extend(self.sentTokenizer.tokenize(para, realign_boundaries=True))
 		self.sentno = len(sents)
 
 		for sent in sents:
 			words = nltk.tokenize.word_tokenize(sent)
 
 			for word in words:
-				if (self.regexp.search(word)) :
-					pass
-				else :
+				if curses.ascii.isalpha(word[0]):
 					self.charno += len(word) 
 					result = self.nsyl(word)[0]
 					self.sylno += result
