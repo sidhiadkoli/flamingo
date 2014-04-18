@@ -10,11 +10,15 @@ class Comments:
 	def __init__(self):
 		self.comments = []
 		self.regexp = re.compile('\A[^a-zA-Z]')
-		
+		self.sentTokenizer = nltk.tokenize.punkt.PunktSentenceTokenizer()		
+
 		self.initFreqData()
-		
+		self.initMisusedWords()
+		self.initMisusedPhrases()	
+
+	def initMisusedWords(self):
 		# Smriti :: add more words
-		self.misused_list = [("accept", "VB", "except"),
+		self.misusedList = [("accept", "VB", "except"),
 			("except", "NN", "accept"),
 			("than", "IN", "then"),
 			("then", "RB", "than"),
@@ -22,12 +26,13 @@ class Comments:
 			("effect", "NN", "affect"),
 			("elicit", "VB", "illicit"),
 			("illicit", "JJ", "elicit")]
-			
+
+	def initMisusedPhrases(self):
 		'''http://www.quora.com/India/What-are-some-English-words-phrases-colloquial-or-not-overused-or-even-misused-in-India
 			http://www.policymic.com/articles/31309/10-most-commonly-misused-words
 			http://www.rediff.com/getahead/slide-show/slide-show-1-career-top-english-mistakes-desi-make/20110719.htm
 		'''
-		self.misused_indian = [("you gets", "you get"),
+		self.misusedIndian = [("you gets", "you get"),
 			("please do the needful","Please do what's necessary"),
 			("pluck flowers", "pick flowers"),
 			("yesterday evening", "last evening"),
@@ -61,12 +66,14 @@ class Comments:
 		self.comments = []
 		self.floweriness = []
 
-		sents = nltk.tokenize.sent_tokenize(data)
-
+		sents = []
+		for para in data.split('\n'):
+			sents.extend(self.sentTokenizer.tokenize(para, realign_boundaries=True))
+		
 		for i in range(len(sents)):
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 			
-			for p in self.misused_indian:
+			for p in self.misusedIndian:
                 		if(sents[i].find(p[0])!=-1):
 					self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
 
@@ -112,7 +119,7 @@ class Comments:
 	# eg: exceptional, affection
 	# Must be corrected.
 	def misused(self, token):
-		for p in self.misused_list:
+		for p in self.misusedList:
 			if (token[0].lower() == p[0] and token[1][:2] != p[1] ):
 				return self.message(p[2])
 		return None
