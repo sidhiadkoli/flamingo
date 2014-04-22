@@ -18,7 +18,6 @@ class Comments:
 	def initMisusedWords(self):
 		# Smriti :: add more words
 		self.misusedList = [("accept", "VB", "except"),
-			("except", "NN", "accept"),
 			("than", "IN", "then"),
 			("then", "RB", "than"),
 			("affect", "VB", "effect"),
@@ -43,7 +42,6 @@ class Comments:
 			("prepone", "advance"),
 			("anyways", "anyway"),
 			("more better", "better"),
-			("much more", "much"),
 			("by the by", "by the way"),
 			("listening music", "listening to music"),
 			("repeat again", "repeat"),
@@ -159,7 +157,10 @@ class Comments:
 		return passive
 
 	def endsWithPrep(self, tagged):
-		if len(tagged) > 1 and tagged[len(tagged) - 2][1] == "IN":
+		if not len(tagged) > 1:
+			return False
+		pos = len(tagged) - 1 if curses.ascii.isalpha(tagged[len(tagged)-1][1][0]) else len(tagged) - 2 
+		if tagged[pos][1] == "IN":
 			return True
 		return False
 
