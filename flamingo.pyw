@@ -22,7 +22,7 @@ class SchoolDialog(QtGui.QDialog):
 		texttemp = str(self.ui.titleTextEdit.toPlainText()).strip()
 		text = "Title :: "
 		if(texttemp ==""):
-			texttemp = "Type the title  here"
+			texttemp = "Type the title here"
 		text += texttemp
 		
 		texttemp = str(self.ui.introTextEdit.toPlainText()).strip()
@@ -32,19 +32,19 @@ class SchoolDialog(QtGui.QDialog):
 		
 		texttemp = str(self.ui.point1TextEdit.toPlainText()).strip()
 		if(texttemp ==""):
-			texttemp = "Type point considered for 1st Paragraph here"
+			texttemp = "Type point considered for 1st Paragraph here."
 		text += "\n\n"+texttemp
 		text += " Expand here"
 		
 		texttemp = str(self.ui.point2TextEdit.toPlainText()).strip()
 		if(texttemp ==""):
-			texttemp = "Type point considered for 2nd Paragraph here"
+			texttemp = "Type point considered for 2nd Paragraph here."
 		text += "\n\n"+texttemp
 		text += " Expand here"
 		
 		texttemp = str(self.ui.point3TextEdit.toPlainText()).strip()
 		if(texttemp ==""):
-			texttemp = "Type point considered for 3rd Paragraph here"
+			texttemp = "Type point considered for 3rd Paragraph here."
 		text += "\n\n"+texttemp
 		text += " Expand here"
 		
@@ -125,7 +125,7 @@ class LetterDialog(QtGui.QDialog):
 		if(texttemp == ""):
 			texttemp = "Enter regards here"
 		text += texttemp
-		text += "\n\n"
+		text += "\n"
 		
 		#sender's name
 		texttemp = str(self.ui.sendNameLineEdit.text()).strip()
@@ -487,29 +487,22 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName())
 
 	def createSchoolEssay(self):
-	
 		self.schoolEssay = SchoolDialog()
-		self.schoolEssay.exec_()
-		
-		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.schoolEssay.getCombinedText())
-		self.textEdit.document().setModified(True)
+		self.execTemplate(self.schoolEssay)
 		
 	def createDebate(self):
-		
-		
 		self.debate = DebateDialog()
-		self.debate.exec_()
-		
-		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.debate.getCombinedText())
-		self.textEdit.document().setModified(True)
+		self.execTemplate(self.debate)
 		
 	def createFormalLetter(self):
-	
 		self.formalLetter = LetterDialog()
-		self.formalLetter.exec_()
-		
-		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.formalLetter.getCombinedText())
-		self.textEdit.document().setModified(True)
+		self.execTemplate(self.formalLetter)
+
+	def execTemplate(self, template):
+		template.exec_()
+		if template.result() == QtGui.QDialog.Accepted:
+			self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + template.getCombinedText())
+			self.textEdit.document().setModified(True)
 
 	def evaluate(self):
 		if str(self.textEdit.toPlainText()) == "":
@@ -579,7 +572,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.ui.readabilityTextEdit.setTextBackgroundColor(self.colour[1])
 		else :
 			self.ui.readabilityTextEdit.setTextBackgroundColor(self.colour[2])
-
 
 		return True
 
