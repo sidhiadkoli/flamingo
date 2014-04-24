@@ -22,7 +22,7 @@ class SchoolDialog(QtGui.QDialog):
 		texttemp = str(self.ui.titleTextEdit.toPlainText()).strip()
 		text = "Title :: "
 		if(texttemp ==""):
-			texttemp = "Type the Title  here"
+			texttemp = "Type the title  here"
 		text += texttemp
 		
 		texttemp = str(self.ui.introTextEdit.toPlainText()).strip()
@@ -34,19 +34,19 @@ class SchoolDialog(QtGui.QDialog):
 		if(texttemp ==""):
 			texttemp = "Type point considered for 1st Paragraph here"
 		text += "\n\n"+texttemp
-		text += "Expand here"
+		text += " Expand here"
 		
 		texttemp = str(self.ui.point2TextEdit.toPlainText()).strip()
 		if(texttemp ==""):
 			texttemp = "Type point considered for 2nd Paragraph here"
 		text += "\n\n"+texttemp
-		text += "Expand here"
+		text += " Expand here"
 		
 		texttemp = str(self.ui.point3TextEdit.toPlainText()).strip()
 		if(texttemp ==""):
 			texttemp = "Type point considered for 3rd Paragraph here"
 		text += "\n\n"+texttemp
-		text += "Expand here"
+		text += " Expand here"
 		
 		text += "\n\nType conclusion here."
 
@@ -153,26 +153,26 @@ class DebateDialog(QtGui.QDialog):
 		text = ""
 		temptext = str(self.ui.introTextEdit.toPlainText()).strip()
 		if(temptext == ""):
-			temptext = "Type Introduction here"
+			temptext = "Type introduction here"
 		text += temptext	
 		text += "\n\n"
 		temptext = str(self.ui.arg1TextEdit.toPlainText()).strip()
 		if(temptext == ""):
-			temptext = "Enter 1st Arguement Here."
+			temptext = "Enter 1st argument here."
 		text += temptext
 		text +=" Justify Here."
 		text += "\n\n"
 		temptext = str(self.ui.arg2TextEdit.toPlainText()).strip()
 		
 		if(temptext == ""):
-			temptext = "Enter 2nd Arguement Here."
+			temptext = "Enter 2nd argument here."
 		text += temptext
 		text +=" Justify Here."
 		text += "\n\n"
 		
 		temptext = str(self.ui.arg3TextEdit.toPlainText()).strip()
 		if(temptext == ""):
-			temptext = "Enter 1st Arguement Here."
+			temptext = "Enter 3rd argument here."
 		text += temptext
 		text +=" Justify Here."
 		text += "\n\n"
@@ -330,38 +330,32 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.actionRead0 = QtGui.QAction("None",
 			self,
 			checkable=True,
-			checked=True,
-			triggered=self.setRead1)
+			checked=True)
 		readability.addAction(ag.addAction(self.actionRead0))
 		
 		self.actionRead1 = QtGui.QAction("Children (<=12)",
 			self,			
-			checkable=True,
-			triggered=self.setRead1)
+			checkable=True)
 		readability.addAction(ag.addAction(self.actionRead1))
 
 		self.actionRead2 = QtGui.QAction("Adolescence",
 			self,			
-			checkable=True,
-			triggered=self.setRead1)
+			checkable=True)
 		readability.addAction(ag.addAction(self.actionRead2))
 
 		self.actionRead3 = QtGui.QAction("Undergraduate",
 			self,			
-			checkable=True,
-			triggered=self.setRead1)
+			checkable=True)
 		readability.addAction(ag.addAction(self.actionRead3))
 
 		self.actionRead4 = QtGui.QAction("Graduate",
 			self,			
-			checkable=True,
-			triggered=self.setRead1)
+			checkable=True)
 		readability.addAction(ag.addAction(self.actionRead4))
 
 		self.actionRead5 = QtGui.QAction("PhD",
 			self,			
-			checkable=True,
-			triggered=self.setRead1)
+			checkable=True)
 		readability.addAction(ag.addAction(self.actionRead5))
 		
 		ag.triggered.connect(self.setReadability)	
@@ -516,9 +510,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 		
 		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.formalLetter.getCombinedText())
 		self.textEdit.document().setModified(True)
-
-	def setRead1(self):
-		pass
 
 	def evaluate(self):
 		if str(self.textEdit.toPlainText()) == "":
