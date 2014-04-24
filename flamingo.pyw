@@ -493,24 +493,28 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName())
 
 	def createSchoolEssay(self):
+	
 		self.schoolEssay = SchoolDialog()
 		self.schoolEssay.exec_()
-
-		self.textEdit.setPlainText(self.schoolEssay.getCombinedText())
+		
+		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.schoolEssay.getCombinedText())
 		self.textEdit.document().setModified(True)
 		
 	def createDebate(self):
+		
+		
 		self.debate = DebateDialog()
 		self.debate.exec_()
-
-		self.textEdit.setPlainText(self.debate.getCombinedText())
+		
+		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.debate.getCombinedText())
 		self.textEdit.document().setModified(True)
 		
 	def createFormalLetter(self):
+	
 		self.formalLetter = LetterDialog()
 		self.formalLetter.exec_()
 		
-		self.textEdit.setPlainText(self.formalLetter.getCombinedText())
+		self.textEdit.setPlainText(str(self.textEdit.toPlainText()).strip() + "\n" + self.formalLetter.getCombinedText())
 		self.textEdit.document().setModified(True)
 
 	def setRead1(self):
