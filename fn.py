@@ -69,6 +69,7 @@ class Comments:
 		sentno = len(sents)
 		
 		for i in range(len(sents)):
+			sents[i] = sents[i].strip()
 			tokens = nltk.tokenize.word_tokenize(sents[i])
 			
 			for p in self.misusedIndian:
@@ -109,10 +110,6 @@ class Comments:
 	def message(self, word):
 		return "\'" + word + "\' might be more suitable in this sentence."
 
-	# Sidhi :: fix error
-	# Gives error for words containing words in the misused list.
-	# eg: exceptional, affection
-	# Must be corrected.
 	def misused(self, token):
 		for p in self.misusedList:
 			if (token[0].lower() == p[0] and token[1][:2] != p[1] ):
@@ -182,8 +179,8 @@ class Comments:
 						return False
 					else:
 						isPresent = True
-		return True
-	
+		return True	
+
 class Readability:
 	def __init__(self):
 		self.res = []
@@ -293,4 +290,3 @@ class Readability:
 		
 def dec(decnum):
 	return "%.2f" %decnum
-
