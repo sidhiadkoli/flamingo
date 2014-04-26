@@ -588,6 +588,8 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.ui.readabilityTextEdit.clear()
 		self.ui.commentsListWidget.clear()
 		self.ui.flowerTextEdit.clear()
+		self.comments = []
+		self.mapping = []
 
 
 if __name__ == '__main__':

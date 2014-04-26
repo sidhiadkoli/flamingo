@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Editor_window.ui'
 #
-# Created: Tue Apr 15 19:13:51 2014
+# Created: Fri Apr 25 19:23:29 2014
 #      by: PyQt4 UI code generator 4.10.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -39,11 +39,6 @@ class Ui_MainWindow(object):
         self.commentsListWidget.setProperty("isWrapping", False)
         self.commentsListWidget.setWordWrap(True)
         self.commentsListWidget.setObjectName(_fromUtf8("commentsListWidget"))
-        self.editorTextEdit = QtGui.QTextEdit(self.centralwidget)
-        self.editorTextEdit.setGeometry(QtCore.QRect(10, 20, 521, 611))
-        self.editorTextEdit.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.editorTextEdit.setReadOnly(False)
-        self.editorTextEdit.setObjectName(_fromUtf8("editorTextEdit"))
         self.readabilityTextEdit = QtGui.QTextEdit(self.centralwidget)
         self.readabilityTextEdit.setGeometry(QtCore.QRect(540, 380, 331, 251))
         self.readabilityTextEdit.setReadOnly(True)
@@ -68,6 +63,10 @@ class Ui_MainWindow(object):
         self.flowerTextEdit.setGeometry(QtCore.QRect(640, 320, 131, 51))
         self.flowerTextEdit.setReadOnly(True)
         self.flowerTextEdit.setObjectName(_fromUtf8("flowerTextEdit"))
+        self.editorTextEdit = QtGui.QPlainTextEdit(self.centralwidget)
+        self.editorTextEdit.setGeometry(QtCore.QRect(13, 17, 521, 611))
+        self.editorTextEdit.setTabStopWidth(42)
+        self.editorTextEdit.setObjectName(_fromUtf8("editorTextEdit"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 22))

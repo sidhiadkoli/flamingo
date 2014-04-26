@@ -74,7 +74,7 @@ class Comments:
 			
 			for p in self.misusedIndian:
                 		if(sents[i].lower().find(p[0])!=-1):
-					self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" You should use " + p[1] + "instead of " + p[0]])
+					self.comments.append([sents[i], 1, "\"" + sents[i][:20] + "...\" Consider using \'" + p[1] + "\' instead of \'" + p[0] + "\'."])
 
 			rareno += self.rareCount(tokens)
 			

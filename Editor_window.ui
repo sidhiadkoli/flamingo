@@ -43,22 +43,6 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="editorTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>521</width>
-      <height>611</height>
-     </rect>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="readOnly">
-     <bool>false</bool>
-    </property>
-   </widget>
    <widget class="QTextEdit" name="readabilityTextEdit">
     <property name="geometry">
      <rect>
@@ -144,6 +128,19 @@
     </property>
     <property name="readOnly">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="editorTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>17</y>
+      <width>521</width>
+      <height>611</height>
+     </rect>
+    </property>
+    <property name="tabStopWidth">
+     <number>42</number>
     </property>
    </widget>
   </widget>
