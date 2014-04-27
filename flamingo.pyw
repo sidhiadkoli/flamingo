@@ -406,7 +406,7 @@ class EditorMainWindow(QtGui.QMainWindow):
 		shouldSave = QtGui.QMessageBox.warning(self, "Application",
 				"Do you want to save the changes you " +
 				"made to the document \"" +
-				self.windowTitle() +
+				self.windowTitle()[:-3] +
 				"\"?", 
 				QtGui.QMessageBox.Save | QtGui.QMessageBox.Discard | QtGui.QMessageBox.Cancel)
 
@@ -472,7 +472,6 @@ class EditorMainWindow(QtGui.QMainWindow):
 		self.setFileName(fname)
 		return self.fileSave()
 
-	
 	def closeEvent(self, event):
 		if self.checkSave():
 			event.accept()
@@ -482,9 +481,9 @@ class EditorMainWindow(QtGui.QMainWindow):
 	def setFileName(self, name):
 		self.fileName = name
 		if self.fileName == "":
-			self.setWindowTitle("untitled")
+			self.setWindowTitle("untitled[*]")
 		else:
-			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName())
+			self.setWindowTitle(QtCore.QFileInfo(self.fileName).fileName() + "[*]")
 
 	def createSchoolEssay(self):
 		self.schoolEssay = SchoolDialog()
