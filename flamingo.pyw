@@ -534,19 +534,22 @@ class EditorMainWindow(QtGui.QMainWindow):
 			self.ui.flowerTextEdit.append(f)
 
 	def itemSelectedSlot(self):
-		item = self.ui.commentsListWidget.currentItem()
-		row = self.ui.commentsListWidget.currentRow()
-		com = self.comments[self.mapping[row]][0]
-		cu = self.textEdit.textCursor()
-		pos = str(self.textEdit.toPlainText()).find(com)
+		try: 
+			item = self.ui.commentsListWidget.currentItem()
+			row = self.ui.commentsListWidget.currentRow()
+			com = self.comments[self.mapping[row]][0]
+			cu = self.textEdit.textCursor()
+			pos = str(self.textEdit.toPlainText()).find(com)
 		
-		if pos != -1:
-			cu.setPosition(pos)
-			cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
-			self.textEdit.setTextCursor(cu)
-		else:
-			cu.setPosition(0)
-			self.textEdit.setTextCursor(cu)	
+			if pos != -1:
+				cu.setPosition(pos)
+				cu.setPosition(pos+len(com), QtGui.QTextCursor.KeepAnchor)
+				self.textEdit.setTextCursor(cu)
+			else:
+				cu.setPosition(0)
+				self.textEdit.setTextCursor(cu)	
+		except:
+			pass
 
 	def getReadability(self):
 		self.ui.readabilityTextEdit.clear()
